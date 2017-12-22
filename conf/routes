@@ -1,0 +1,9 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+
+GET         /*file                                      com.ddp.dataplatform.Static.at(path="/public", file)
+POST        /sp_create/:name/:script                    com.ddp.dataplatform.DataPlatformController.sp_create(name, script)
+GET         /sp/:name                                   com.ddp.dataplatform.DataPlatformController.sp(name)
