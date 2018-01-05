@@ -5,6 +5,6 @@
 # Home page
 
 GET         /sp/edit/:name                              com.ddp.dataplatform.DataPlatformController.get(name:String)
-POST        /sp/edit                                    com.ddp.dataplatform.DataPlatformController.create
+POST        /sp/edit                                    com.ddp.dataplatform.DataPlatformController.createOrUpdate
 
 GET         /*file                                      com.ddp.dataplatform.Static.at(path="/public", file)

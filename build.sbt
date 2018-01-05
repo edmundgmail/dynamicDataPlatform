@@ -1,4 +1,5 @@
 import com.typesafe.sbt.packager.docker._
+import sbt.Keys.libraryDependencies
 
 
 name := "dynamicDataPlatform"
@@ -8,6 +9,7 @@ version := "0.1"
 lazy val `dynamicDataPlatform` = (project in file(".")).enablePlugins(PlayScala,ElasticBeanstalkPlugin,BuildInfoPlugin)
 
 scalaVersion := "2.11.8"
+
 
 licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
 
@@ -33,7 +35,9 @@ libraryDependencies ++= Seq(
   "org.elasticsearch" %% "elasticsearch-spark-20" % elastic4sVersion,
   "org.elasticsearch" % "elasticsearch" % elastic4sVersion,
   "com.twitter" %% "util-eval" % "6.43.0",
-    filters,
+  "com.chuusai"   %% "shapeless"     % "2.3.2",
+  ws,
+  filters,
   cache)
 
 // disable documentation generation
