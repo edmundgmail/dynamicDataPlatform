@@ -3,7 +3,8 @@ package com.ddp.dataplatform
 import javax.inject.{Inject, Named}
 
 import akka.NotUsed
-import akka.actor.ActorRef
+import akka.actor.{ActorRef, ActorSystem}
+import akka.stream.Materializer
 import akka.stream.scaladsl.Flow
 import akka.util.Timeout
 import com.ddp.actors.MyWebSocketActor
@@ -18,7 +19,7 @@ import play.api.mvc._
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-class DataPlatformController @Inject()(@Named("userParentActor") userParentActor: ActorRef, service: DataPlatformService) extends Controller with ContextHelper with SameOriginCheck {
+class DataPlatformController @Inject()(implicit service: DataPlatformService, system: ActorSystem, materializer: Materializer) extends Controller with ContextHelper with SameOriginCheck {
 
     private def handleException: PartialFunction[Throwable, Result] = {
       case e : ServiceException => BadRequest(e.message)
@@ -44,7 +45,7 @@ class DataPlatformController @Inject()(@Named("userParentActor") userParentActor
      )
    }
 
-  def socket = WebSocket.accept[String, String] { request =>
+  def ws : WebSocket = WebSocket.accept[String, String] { request =>
     ActorFlow.actorRef(out => MyWebSocketActor.props(out))
   }
 
@@ -75,7 +76,7 @@ class DataPlatformController @Inject()(@Named("userParentActor") userParentActor
 
 trait SameOriginCheck {
 
-  def logger: Logger
+  //def logger: Logger
 
   /**
     * Checks that the WebSocket comes from the same origin.  This is necessary to protect
@@ -87,15 +88,15 @@ trait SameOriginCheck {
   def sameOriginCheck(rh: RequestHeader): Boolean = {
     rh.headers.get("Origin") match {
       case Some(originValue) if originMatches(originValue) =>
-        logger.debug(s"originCheck: originValue = $originValue")
+        //logger.debug(s"originCheck: originValue = $originValue")
         true
 
       case Some(badOrigin) =>
-        logger.error(s"originCheck: rejecting request because Origin header value ${badOrigin} is not in the same origin")
+        //logger.error(s"originCheck: rejecting request because Origin header value ${badOrigin} is not in the same origin")
         false
 
       case None =>
-        logger.error("originCheck: rejecting request because no Origin header found")
+        //logger.error("originCheck: rejecting request because no Origin header found")
         false
     }
   }
@@ -106,7 +107,8 @@ trait SameOriginCheck {
     * This is probably better done through configuration same as the allowedhosts filter.
     */
   def originMatches(origin: String): Boolean = {
-    origin.contains("localhost:9000") || origin.contains("localhost:19001")
+    //origin.contains("localhost:9000") || origin.contains("localhost:19001")
+    true
   }
 
 }
