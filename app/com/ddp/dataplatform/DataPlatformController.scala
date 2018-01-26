@@ -1,17 +1,13 @@
 package com.ddp.dataplatform
 
-import javax.inject.{Inject, Named}
+import javax.inject.Inject
 
-import akka.NotUsed
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.ActorSystem
 import akka.stream.Materializer
-import akka.stream.scaladsl.Flow
-import akka.util.Timeout
 import com.ddp.actors.MyWebSocketActor
 import com.ddp.daos.core.ContextHelper
 import com.ddp.daos.exceptions.ServiceException
 import com.ddp.models._
-import play.api.Logger
 import play.api.libs.json.{JsArray, JsObject, JsString, _}
 import play.api.libs.streams.ActorFlow
 import play.api.mvc._
@@ -19,7 +15,7 @@ import play.api.mvc._
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-class DataPlatformController @Inject()(implicit service: DataPlatformService, system: ActorSystem, materializer: Materializer) extends Controller with ContextHelper with SameOriginCheck {
+class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlService, scalaService: DataPlatformScalaService, system: ActorSystem, materializer: Materializer) extends Controller with ContextHelper with SameOriginCheck {
 
     private def handleException: PartialFunction[Throwable, Result] = {
       case e : ServiceException => BadRequest(e.message)
@@ -28,16 +24,17 @@ class DataPlatformController @Inject()(implicit service: DataPlatformService, sy
     }
 
 
-    def createOrUpdate = Action.async(parse.json) {implicit request =>
+    def createOrUpdateSqlScript = Action.async(parse.json) {implicit request =>
       validateAndThen[SqlScript] {
-        entity => service.createOrUpdateSqlScript(entity).map{
+        entity => sqlService.createOrUpdateScript(entity).map{
           case Success(e) => Ok(Json.toJson(e))
         }
       } recover handleException
     }
 
-   def get(name: String) = Action.async {
-     service.getSqlScript(name).map(
+
+   def getSqlScript(name: String) = Action.async {
+     sqlService.getScript(name).map(
        script => {
          val json = Json.toJson(Some(script))
          Ok(json)
@@ -45,17 +42,60 @@ class DataPlatformController @Inject()(implicit service: DataPlatformService, sy
      )
    }
 
-  def ws : WebSocket = WebSocket.accept[String, String] { request =>
-    ActorFlow.actorRef(out => MyWebSocketActor.props(out))
-  }
-
-  def run(name:String) = Action.async {
-    service.getSqlScript(name).map(
+  def sparkRunSQLByName(name: String) =  Action.async {
+    sqlService.sparkRunByName(name).map(
       script => {
         val json = Json.toJson(Some(script))
         Ok(json)
       }
     )
+  }
+
+
+
+  def getAllSqlScript =  Action.async {
+    sqlService.getAllScript.map(
+      script => {
+        val json = Json.toJson(Some(script))
+        Ok(json)
+      }
+    )
+  }
+
+  def ws : WebSocket = WebSocket.accept[String, String] { request =>
+    ActorFlow.actorRef(out => MyWebSocketActor.props(out))
+  }
+
+  def sparkRunSql = Action.async(parse.json) { implicit request =>
+    validateAndThen[SqlScript] {
+      entity => {
+        Future{
+          sqlService.sparkRun(entity) match {
+            case Success(e) => Ok(Json.toJson(e))
+          }
+        }
+      }
+    } recover handleException
+  }
+
+  def sparkRunScala= Action.async(parse.json) { implicit request =>
+    validateAndThen[ScalaScript] {
+      entity => {
+        Future{
+          scalaService.sparkRun(entity) match {
+            case Success(e) => Ok(e.toString)
+          }
+        }
+      }
+    } recover handleException
+  }
+
+  def createOrUpdateScalaScript = Action.async(parse.json) {implicit request =>
+    validateAndThen[ScalaScript] {
+      entity => scalaService.createOrUpdateScript(entity).map{
+        case Success(e) => Ok(Json.toJson(e))
+      }
+    } recover handleException
   }
 
   def validateAndThen[T: Reads](t: T => Future[Result])(implicit request: Request[JsValue]) = {

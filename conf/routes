@@ -4,7 +4,10 @@
 
 # Home page
 GET         /ws                                         com.ddp.dataplatform.DataPlatformController.ws
-GET         /sp/edit/:name                              com.ddp.dataplatform.DataPlatformController.get(name:String)
-POST        /sp/edit                                    com.ddp.dataplatform.DataPlatformController.createOrUpdate
-
+GET         /sp/:name                                   com.ddp.dataplatform.DataPlatformController.getSqlScript(name:String)
+GET         /sp                                         com.ddp.dataplatform.DataPlatformController.getAllSqlScript
+POST        /sp/edit                                    com.ddp.dataplatform.DataPlatformController.createOrUpdateSqlScript
+POST        /sp/runSql                                  com.ddp.dataplatform.DataPlatformController.sparkRunSql
+GET         /sp/run/:name                               com.ddp.dataplatform.DataPlatformController.sparkRunSQLByName(name:String)
+POST        /sp/runScala                                com.ddp.dataplatform.DataPlatformController.sparkRunScala
 GET         /*file                                      com.ddp.dataplatform.Static.at(path="/public", file)

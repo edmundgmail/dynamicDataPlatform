@@ -20,9 +20,10 @@ val elastic4sVersion = "6.1.0"
 libraryDependencies ++= Seq(
   "org.reactivemongo" %% "play2-reactivemongo" % "0.11.13",
   "org.reactivemongo" %% "reactivemongo-play-json" % "0.11.14",
-  "org.apache.spark" % "spark-core_2.11" % "2.2.1",
-  "org.apache.spark" % "spark-sql_2.11" % "2.2.1",
-  "com.julianpeeters" % "case-class-generator_2.11" % "0.7.1",
+  "org.apache.spark" % "spark-core_2.11" % "2.2.1" % "compile",
+  "org.apache.spark" % "spark-sql_2.11" % "2.2.1" % "compile",
+  "org.codehaus.janino" % "janino" % "3.0.7",
+"com.julianpeeters" % "case-class-generator_2.11" % "0.7.1",
   "org.mockito" % "mockito-core" % "1.10.19" % Test,
   "org.scalatestplus.play" % "scalatestplus-play_2.11" % "1.5.1" % Test,
   "com.sksamuel.elastic4s" %% "elastic4s-core" % elastic4sVersion,
