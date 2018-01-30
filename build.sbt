@@ -37,6 +37,7 @@ libraryDependencies ++= Seq(
   "org.elasticsearch" % "elasticsearch" % elastic4sVersion,
   "com.twitter" %% "util-eval" % "6.43.0",
   "com.chuusai"   %% "shapeless"     % "2.3.2",
+  "com.oracle" % "ojdbc6" % "11.2.0.4",
   ws,
   filters,
   cache)
@@ -48,6 +49,7 @@ sources in(Compile, doc) := Seq.empty
 publishArtifact in(Compile, packageDoc) := false
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
+resolvers += Resolver.mavenLocal
 
 net.virtualvoid.sbt.graph.Plugin.graphSettings
 

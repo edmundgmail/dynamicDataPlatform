@@ -36,7 +36,7 @@ object ScalaSourceCompiler {
     val jarFile = CreateJarFile.mkJar(targetDir, "Main")
     loadJar(sources.name, jarFile)
 
-    //FileUtils.forceDelete(targetDir)
+    FileUtils.forceDelete(targetDir)
     FileUtils.forceDelete(new File(jarFile))
   }
 
@@ -47,10 +47,9 @@ object ScalaSourceCompiler {
 
   def run(name:String, func: String = "run")(implicit spark:SparkSession) = {
     val classLoader=  clazzExModule.get(name).get
-
-    val method: Method = classLoader.getDeclaredMethod(func, classOf[SparkSession])
-    val instance = classLoader.newInstance()
-    method.invoke(instance, spark)
+    val instance = classLoader.getConstructor(classOf[SparkSession]).newInstance(spark)
+    val method: Method = classLoader.getDeclaredMethod(func)
+    method.invoke(instance)
 
   }
 
