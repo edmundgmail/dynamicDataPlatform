@@ -4,10 +4,18 @@
 
 # Home page
 GET         /ws                                         com.ddp.dataplatform.DataPlatformController.ws
-GET         /sp/:name                                   com.ddp.dataplatform.DataPlatformController.getSqlScript(name:String)
-GET         /sp                                         com.ddp.dataplatform.DataPlatformController.getAllSqlScript
-POST        /sp/edit                                    com.ddp.dataplatform.DataPlatformController.createOrUpdateSqlScript
-POST        /sp/runSql                                  com.ddp.dataplatform.DataPlatformController.sparkRunSql
-GET         /sp/run/:name                               com.ddp.dataplatform.DataPlatformController.sparkRunSQLByName(name:String)
-POST        /sp/runScala                                com.ddp.dataplatform.DataPlatformController.sparkRunScala
+
+
+GET         /sp/sql/run/:name                           com.ddp.dataplatform.DataPlatformController.sparkRunSQLByName(name:String)
+POST        /sp/sql/run                                 com.ddp.dataplatform.DataPlatformController.sparkRunSql
+POST        /sp/sql/edit                                com.ddp.dataplatform.DataPlatformController.createOrUpdateSqlScript
+GET         /sp/sql/script/:name                        com.ddp.dataplatform.DataPlatformController.getSqlScript(name:String)
+GET         /sp/sql/script                              com.ddp.dataplatform.DataPlatformController.getAllSqlScript
+
+GET         /sp/scala/run/:name                           com.ddp.dataplatform.DataPlatformController.sparkRunScalaByName(name:String)
+POST        /sp/scala/run                               com.ddp.dataplatform.DataPlatformController.sparkRunScala
+POST        /sp/scala/edit                                com.ddp.dataplatform.DataPlatformController.createOrUpdateScalaScript
+GET         /sp/scala/script/:name                               com.ddp.dataplatform.DataPlatformController.getAllScalaScript(name:String)
+GET         /sp/scala/script                           com.ddp.dataplatform.DataPlatformController.getAllScalaScript
+
 GET         /*file                                      com.ddp.dataplatform.Static.at(path="/public", file)

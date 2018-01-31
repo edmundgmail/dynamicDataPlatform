@@ -22,17 +22,28 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
     Success(ret)
   }
 
-  def getScalaScript(name: String) :  Future[Option[ScalaScript]] = {
+
+  def sparkRunByName(name:String) = {
+    getScript(name).flatMap{
+      case Some(x) =>
+      Future{
+        ScalaSourceCompiler.compile(x)
+        ScalaSourceCompiler.run(name)(spark)
+      }
+    }
+  }
+
+  def getScript(name: String) :  Future[Option[ScalaScript]] = {
     scalaScriptRepository.findOne(Json.obj("name" -> name))
   }
 
-  def getAllScalaScript : Future[List[ScriptSimple]] = {
+  def getAllScript : Future[List[ScriptSimple]] = {
     scalaScriptRepository.find[ScriptSimple](projection = Json.obj("name"->1))
   }
 
 
   def createOrUpdateScript(entity: ScalaScript) = {
-      this.getScalaScript(entity.name).flatMap {
+      this.getScript(entity.name).flatMap {
         case Some(script) => scalaScriptRepository.update(script._id.get.stringify, script)
         case _ => scalaScriptRepository.insert(entity)
       }
