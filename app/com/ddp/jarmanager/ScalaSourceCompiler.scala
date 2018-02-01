@@ -3,7 +3,7 @@ package com.ddp.jarmanager
 import java.io._
 import java.lang.reflect.Method
 
-import com.ddp.models.{ScalaScript, SqlScript}
+import com.ddp.models.{CodeSnippet}
 import com.twitter.util.Eval
 import org.apache.commons.io.{FileUtils, IOUtils}
 import org.apache.hadoop
@@ -24,7 +24,7 @@ object ScalaSourceCompiler {
   private val urlClassLoader = new URLClassLoader(Seq.empty, this.getClass.getClassLoader)
   @transient private var clazzExModule: mutable.Map[String, Class[_]] = mutable.HashMap.empty
 
-  def compile(sources: ScalaScript):Unit = {
+  def compile(sources: CodeSnippet):Unit = {
 
     val  targetDir = new File("target_" + System.currentTimeMillis + "_" + Random.nextInt(10000) + ".tmp")
 
@@ -32,7 +32,7 @@ object ScalaSourceCompiler {
 
     val eval = new Eval(Some(targetDir))
 
-    eval.compile(sources.text)
+    eval.compile(sources.content)
 
     val jarFile = CreateJarFile.mkJar(targetDir, "Main")
     loadJar(sources.name, jarFile)

@@ -25,7 +25,7 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
 
 
     def createOrUpdateSqlScript = Action.async(parse.json) {implicit request =>
-      validateAndThen[SqlScript] {
+      validateAndThen[CodeSnippet] {
         entity => sqlService.createOrUpdateScript(entity).map{
           case Success(e) => Ok(Json.toJson(e))
         }
@@ -53,7 +53,7 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
 
 
   def sparkRunScala= Action.async(parse.json) { implicit request =>
-    validateAndThen[ScalaScript] {
+    validateAndThen[CodeSnippet] {
       entity => {
         Future{
           scalaService.sparkRun(entity) match {
@@ -89,7 +89,7 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
   }
 
   def sparkRunSql = Action.async(parse.json) { implicit request =>
-    validateAndThen[SqlScript] {
+    validateAndThen[CodeSnippet] {
       entity => {
         Future{
           sqlService.sparkRun(entity) match {
@@ -102,7 +102,7 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
 
 
   def createOrUpdateScalaScript = Action.async(parse.json) {implicit request =>
-    validateAndThen[ScalaScript] {
+    validateAndThen[CodeSnippet] {
       entity => scalaService.createOrUpdateScript(entity).map{
         case Success(e) => Ok(Json.toJson(e))
       }

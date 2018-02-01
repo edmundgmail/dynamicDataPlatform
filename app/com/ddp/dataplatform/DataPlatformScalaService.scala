@@ -3,7 +3,7 @@ package com.ddp.dataplatform
 import javax.inject.{Inject, Singleton}
 
 import com.ddp.jarmanager.ScalaSourceCompiler
-import com.ddp.models.{ScalaScript, ScriptSimple}
+import com.ddp.models.{CodeSnippet, ScriptSimple}
 import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -12,11 +12,11 @@ import scala.util.Success
 
 @Singleton
 class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepository) extends DataPlatformCoreService{
-  def getScalaScripts : Future[List[ScalaScript]] = {
-    scalaScriptRepository.find[ScalaScript]()
+  def getScalaScripts : Future[List[CodeSnippet]] = {
+    scalaScriptRepository.find[CodeSnippet]()
   }
 
-  def sparkRun(entity: ScalaScript) = {
+  def sparkRun(entity: CodeSnippet) = {
     ScalaSourceCompiler.compile(entity)
     val ret = ScalaSourceCompiler.run(entity.name)(spark)
     Success(ret)
@@ -24,7 +24,7 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
 
 
 
-  def getScript(name: String) :  Future[Option[ScalaScript]] = {
+  def getScript(name: String) :  Future[Option[CodeSnippet]] = {
     scalaScriptRepository.findOne(Json.obj("name" -> name))
   }
 
@@ -33,7 +33,7 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
   }
 
 
-  def createOrUpdateScript(entity: ScalaScript) = {
+  def createOrUpdateScript(entity: CodeSnippet) = {
       this.getScript(entity.name).flatMap {
         case Some(script) => scalaScriptRepository.update(script._id.get.stringify, script)
         case _ => scalaScriptRepository.insert(entity)
