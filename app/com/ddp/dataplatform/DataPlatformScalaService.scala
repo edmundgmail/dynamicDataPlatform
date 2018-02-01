@@ -23,15 +23,6 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
   }
 
 
-  def sparkRunByName(name:String) = {
-    getScript(name).flatMap{
-      case Some(x) =>
-      Future{
-        ScalaSourceCompiler.compile(x)
-        ScalaSourceCompiler.run(name)(spark)
-      }
-    }
-  }
 
   def getScript(name: String) :  Future[Option[ScalaScript]] = {
     scalaScriptRepository.findOne(Json.obj("name" -> name))

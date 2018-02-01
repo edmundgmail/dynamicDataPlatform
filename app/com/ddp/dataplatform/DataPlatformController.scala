@@ -51,12 +51,17 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
     )
   }
 
-  def sparkRunScalaByName(name: String) =  Action.async {
-    scalaService.sparkRunByName(name).map(
-      script => {
-        Ok(script)
+
+  def sparkRunScala= Action.async(parse.json) { implicit request =>
+    validateAndThen[ScalaScript] {
+      entity => {
+        Future{
+          scalaService.sparkRun(entity) match {
+            case Success(e) => Ok(e.toString)
+          }
+        }
       }
-    )
+    } recover handleException
   }
 
 
@@ -95,17 +100,6 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
     } recover handleException
   }
 
-  def sparkRunScala= Action.async(parse.json) { implicit request =>
-    validateAndThen[ScalaScript] {
-      entity => {
-        Future{
-          scalaService.sparkRun(entity) match {
-            case Success(e) => Ok(e.toString)
-          }
-        }
-      }
-    } recover handleException
-  }
 
   def createOrUpdateScalaScript = Action.async(parse.json) {implicit request =>
     validateAndThen[ScalaScript] {

@@ -46,11 +46,11 @@ object ScalaSourceCompiler {
     clazzExModule += name->urlClassLoader.loadClass(name)
   }
 
-  def run(name:String, func: String = "run")(implicit spark:SparkSession) : JsObject = {
+  def run(name:String, func: String = "run")(implicit spark:SparkSession) : Any = {
     val classLoader=  clazzExModule.get(name).get
     val instance = classLoader.getConstructor(classOf[SparkSession]).newInstance(spark)
     val method: Method = classLoader.getDeclaredMethod(func)
-    method.invoke(instance).asInstanceOf[JsObject]
+    method.invoke(instance)
   }
 
 }
