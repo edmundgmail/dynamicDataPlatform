@@ -38,7 +38,9 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "util-eval" % "6.43.0",
   "com.chuusai"   %% "shapeless"     % "2.3.2",
   "com.oracle" % "ojdbc6" % "11.2.0.4",
-  ws,
+  "com.microsoft.sqlserver" % "mssql-jdbc" % "6.2.1.jre8",
+  "mysql" % "mysql-connector-java" % "5.1.6",
+    ws,
   filters,
   cache)
 

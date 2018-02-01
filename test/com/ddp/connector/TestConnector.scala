@@ -25,4 +25,19 @@ class TestConnector extends Testing{
     spark.sql("select * from test1").show(10)
 
   }
+
+  it("test mssql connection") {
+    val properties = new Properties()
+    val connectionUrl = "jdbc:mysql://localhost:3306/ddp;user=ddp;password=password"
+
+    properties.setProperty("url",connectionUrl)
+
+    properties.setProperty("query","(select ID, SEDOL from SEC_POSITION_SUMMARY) summary_alias")
+    import spark.implicits._
+    val conn = new JDBCSparkConnector[Security](spark,properties)
+    conn.registerTempTable("test1")
+    spark.sql("select * from test1").show(10)
+
+
+  }
 }
