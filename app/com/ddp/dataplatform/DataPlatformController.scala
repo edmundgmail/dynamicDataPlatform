@@ -42,6 +42,15 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
      )
    }
 
+  def getScalaScript(name: String) = Action.async {
+     scalaService.getScript(name).map(
+       script => {
+         val json = Json.toJson(Some(script))
+         Ok(json)
+       }
+     )
+   }
+
   def sparkRunSQLByName(name: String) =  Action.async {
     sqlService.sparkRunByName(name).map(
       script => {
