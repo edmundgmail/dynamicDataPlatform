@@ -11,7 +11,7 @@ trait SparkConnector[T] {
   //def getRDD[T]: RDD[T]
   //def getDataset: Dataset[T]
   def getDataframe: DataFrame
-  def getDataset: Dataset[T] = getDataframe.as[T]
+  //def getDataset: Dataset[T] = getDataframe.as[T]
 
   def registerTempTable(name:String) : Boolean = {
     try{
