@@ -11,7 +11,7 @@ import org.apache.spark.sql.Encoder
 
 
 class TestConnector extends Testing{
-  val conf = new SparkConf().setAppName(this.getClass.getCanonicalName).setMaster("local[*]")
+  val conf = new SparkConf().setMaster("local[*]").setSparkHome("/usr/apache/spark-2.1.0-bin-hadoop2.7")
   val spark = SparkSession.builder().config(conf).getOrCreate()
 
   it("testing oracle connection") {
