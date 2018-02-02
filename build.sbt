@@ -40,6 +40,7 @@ libraryDependencies ++= Seq(
   "com.oracle" % "ojdbc6" % "11.2.0.4",
   "com.microsoft.sqlserver" % "mssql-jdbc" % "6.2.1.jre8",
   "mysql" % "mysql-connector-java" % "5.1.6",
+  /*com.databricks % spark-avro_2.11 % 3.2.0 */
     ws,
   filters,
   cache)
