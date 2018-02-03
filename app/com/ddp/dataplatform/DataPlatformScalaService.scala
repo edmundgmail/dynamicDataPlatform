@@ -4,6 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import com.ddp.jarmanager.ScalaSourceCompiler
 import com.ddp.models.{CodeSnippet, ScriptSimple}
+import play.api.Logger
 import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,8 +35,9 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
 
 
   def createOrUpdateScript(entity: CodeSnippet) = {
+    Logger.info("received entity = " + entity.toString)
       this.getScript(entity.name).flatMap {
-        case Some(script) => scalaScriptRepository.update(script._id.get.stringify, script)
+        case Some(script) => scalaScriptRepository.update(script._id.get.stringify, entity)
         case _ => scalaScriptRepository.insert(entity)
       }
   }
