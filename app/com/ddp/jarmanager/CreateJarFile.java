@@ -13,7 +13,7 @@ public class CreateJarFile {
 
     public static String mkJar(File classes, String mainClassName) throws IOException
     {
-        String jarName = mainClassName + System.currentTimeMillis() + "_" + (new java.util.Random()).nextInt(10000) + ".jar";
+        String jarName = mainClassName + ".jar";
         Manifest manifest = new Manifest();
         manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
         manifest.getMainAttributes().put(Attributes.Name.CLASS_PATH, ".");

@@ -8,13 +8,15 @@ import com.ddp.actors.MyWebSocketActor
 import com.ddp.daos.core.ContextHelper
 import com.ddp.daos.exceptions.ServiceException
 import com.ddp.models._
+import com.ddp.utils.NoCache
+import play.api.Logger
 import play.api.libs.json.{JsArray, JsObject, JsString, _}
 import play.api.libs.streams.ActorFlow
 import play.api.mvc._
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
-
+import org.apache.spark.sql.execution.datasources._
 class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlService, scalaService: DataPlatformScalaService, system: ActorSystem, materializer: Materializer) extends Controller with ContextHelper with SameOriginCheck {
 
     private def handleException: PartialFunction[Throwable, Result] = {
@@ -25,6 +27,7 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
 
 
     def createOrUpdateSqlScript = Action.async(parse.json) {implicit request =>
+      Logger.logger.info("request=" + request);
       validateAndThen[CodeSnippet] {
         entity => sqlService.createOrUpdateScript(entity).map{
           case Success(e) => Ok(Json.toJson(e))
@@ -61,17 +64,20 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
   }
 
 
-  def sparkRunScala= Action.async(parse.json) { implicit request =>
+  def sparkRunScala= NoCache (Action.async (parse.json) { implicit request =>
     validateAndThen[CodeSnippet] {
       entity => {
+        Logger.logger.info(s"entity=${entity.name}, content=${entity.content}");
+
         Future{
           scalaService.sparkRun(entity) match {
             case Success(e) => Ok(e.toString)
+            case Failure(e) => BadRequest( s"Message: ${e.getMessage}, cause=${e.getCause}")
           }
         }
       }
     } recover handleException
-  }
+  })
 
 
 

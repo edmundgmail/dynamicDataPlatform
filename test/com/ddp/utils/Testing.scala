@@ -3,7 +3,7 @@ package com.ddp.utils
 import java.io.File
 
 import org.scalatest._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 
 import scala.collection.JavaConverters._
 /**

@@ -22,11 +22,15 @@ import scala.util.Random
 object ScalaSourceCompiler {
 
   private val urlClassLoader = new URLClassLoader(Seq.empty, this.getClass.getClassLoader)
-  @transient private var clazzExModule: mutable.Map[String, Class[_]] = mutable.HashMap.empty
+  private var clazzExModule: mutable.Map[String, Class[_]] = mutable.HashMap.empty
 
-  def compile(sources: CodeSnippet):Unit = {
+  def compile(spark: SparkSession, sources: CodeSnippet) = {
 
-    val  targetDir = new File("target_" + System.currentTimeMillis + "_" + Random.nextInt(10000) + ".tmp")
+    if(clazzExModule contains sources.name){
+        throw new Exception(s"${sources.name} already existed. Please change the name of class or package")
+    }
+
+    val  targetDir = new File(s"${sources.name}")
 
     targetDir.mkdir
 
@@ -34,23 +38,24 @@ object ScalaSourceCompiler {
 
     eval.compile(sources.content)
 
-    val jarFile = CreateJarFile.mkJar(targetDir, "Main")
-    loadJar(sources.name, jarFile)
+    val jarFile = CreateJarFile.mkJar(targetDir, sources.name)
+    loadJar(spark, sources.name, jarFile)
 
-    FileUtils.forceDelete(targetDir)
-    FileUtils.forceDelete(new File(jarFile))
+    //FileUtils.forceDelete(targetDir)
+    //FileUtils.forceDelete(new File(jarFile))
   }
 
-  private def loadJar(name: String, jarFile: String) = {
-    urlClassLoader.addURL((new File(jarFile)).toURI.toURL)
-    clazzExModule += name->urlClassLoader.loadClass(name)
+  private def loadJar(spark: SparkSession, name: String, jarFile: String) = {
+    //urlClassLoader.addURL((new File(jarFile)).toURI.toURL)
+    clazzExModule += name-> ScalaSourceCompiler.getClass /*urlClassLoader.loadClass(name)*/
+    spark.sparkContext.addJar(jarFile)
   }
 
   def run(name:String, func: String = "run")(implicit spark:SparkSession) : Any = {
-    val classLoader=  clazzExModule.get(name).get
-    val instance = classLoader.getConstructor(classOf[SparkSession]).newInstance(spark)
-    val method: Method = classLoader.getDeclaredMethod(func)
-    method.invoke(instance)
+    //val classLoader=  clazzExModule.get(name).get
+    //val instance = classLoader.getConstructor(classOf[SparkSession]).newInstance(spark)
+   // val method: Method = classLoader.getDeclaredMethod(func)
+    //method.invoke(instance)
   }
 
 }

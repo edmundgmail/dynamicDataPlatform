@@ -9,7 +9,7 @@ import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Success
+import scala.util.{Failure, Success}
 
 @Singleton
 class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepository) extends DataPlatformCoreService{
@@ -18,9 +18,14 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
   }
 
   def sparkRun(entity: CodeSnippet) = {
-    ScalaSourceCompiler.compile(entity)
-    val ret = ScalaSourceCompiler.run(entity.name)(spark)
-    Success(ret)
+    try{
+      ScalaSourceCompiler.compile(spark, entity)
+      val ret = ScalaSourceCompiler.run(entity.name)(spark)
+      Success(ret)
+    }
+    catch {
+      case e => Failure(e)
+    }
   }
 
 

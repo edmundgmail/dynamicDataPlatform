@@ -37,11 +37,13 @@ libraryDependencies ++= Seq(
   "org.elasticsearch" % "elasticsearch" % elastic4sVersion,
   "com.twitter" %% "util-eval" % "6.43.0",
   "com.chuusai"   %% "shapeless"     % "2.3.2",
-  "com.oracle" % "ojdbc6" % "11.2.0.4",
+  "com.oracle" % "ojdbc6" % "11.2.0.4"  from "file:/lib/ojdbc6-11.2.0.4.jar",
   "com.microsoft.sqlserver" % "mssql-jdbc" % "6.2.1.jre8",
-  "mysql" % "mysql-connector-java" % "5.1.6",
-  /*com.databricks % spark-avro_2.11 % 3.2.0 */
-    ws,
+  "mysql" % "mysql-connector-java" % "5.1.45",
+  //"spark.jobserver" %% "job-server-api" % "0.8.0" % "compile",
+  "com.databricks" % "spark-avro_2.11" % "3.2.0",
+  "com.hortonworks" % "shc" % "1.1.2-2.2-s_2.11-SNAPSHOT" from "file:/lib/shc-core-1.1.2-2.2-s_2.11-SNAPSHOT.jar",
+   ws,
   filters,
   cache)
 
@@ -52,7 +54,8 @@ sources in(Compile, doc) := Seq.empty
 publishArtifact in(Compile, packageDoc) := false
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
-resolvers += Resolver.mavenLocal
+//resolvers += Resolver.mavenLocal
+resolvers += "Job Server Bintray" at "https://dl.bintray.com/spark-jobserver/maven"
 
 net.virtualvoid.sbt.graph.Plugin.graphSettings
 
