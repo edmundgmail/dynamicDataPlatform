@@ -12,7 +12,10 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 @Singleton
-class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepository) extends DataPlatformCoreService{
+class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepository) {
+
+  val spark = DataPlatformCoreService.spark
+
   def getScalaScripts : Future[List[CodeSnippet]] = {
     scalaScriptRepository.find[CodeSnippet]()
   }
@@ -28,17 +31,6 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
       case e => Failure(e)
     }
   }
-
-  def sparkCompile(entity: CodeSnippet) = {
-    try{
-      val ret = ScalaSourceCompiler.compile(spark, entity)
-      Success(ret)
-    }
-    catch {
-      case e => Failure(e)
-    }
-  }
-
 
   def getScript(name: String) :  Future[Option[CodeSnippet]] = {
     scalaScriptRepository.findOne(Json.obj("name" -> name))

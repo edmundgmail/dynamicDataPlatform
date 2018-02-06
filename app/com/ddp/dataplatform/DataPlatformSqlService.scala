@@ -10,7 +10,9 @@ import scala.concurrent.Future
 import scala.util.Success
 
 @Singleton
-class DataPlatformSqlService @Inject()(sqlScriptRepository: SqlScriptRepository) extends DataPlatformCoreService{
+class DataPlatformSqlService @Inject()(sqlScriptRepository: SqlScriptRepository){
+  val spark = DataPlatformCoreService.spark
+
   def getSqlScripts : Future[List[CodeSnippet]] = {
     sqlScriptRepository.find[CodeSnippet]()
   }
