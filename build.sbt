@@ -40,7 +40,7 @@ libraryDependencies ++= Seq(
   "com.oracle" % "ojdbc6" % "11.2.0.4"  from "file:/lib/ojdbc6-11.2.0.4.jar",
   "com.microsoft.sqlserver" % "mssql-jdbc" % "6.2.1.jre8",
   "mysql" % "mysql-connector-java" % "5.1.45",
-  //"spark.jobserver" %% "job-server-api" % "0.8.0" % "compile",
+  ////"spark.jobserver" %% "job-server-api" % "0.8.0" % "provided",
   "com.databricks" % "spark-avro_2.11" % "3.2.0",
   "com.hortonworks" % "shc" % "1.1.2-2.2-s_2.11-SNAPSHOT" from "file:/lib/shc-core-1.1.2-2.2-s_2.11-SNAPSHOT.jar",
    ws,

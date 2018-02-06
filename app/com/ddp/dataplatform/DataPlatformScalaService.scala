@@ -17,6 +17,7 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
     scalaScriptRepository.find[CodeSnippet]()
   }
 
+
   def sparkRun(entity: CodeSnippet) = {
     try{
       ScalaSourceCompiler.compile(spark, entity)
@@ -28,6 +29,15 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
     }
   }
 
+  def sparkCompile(entity: CodeSnippet) = {
+    try{
+      val ret = ScalaSourceCompiler.compile(spark, entity)
+      Success(ret)
+    }
+    catch {
+      case e => Failure(e)
+    }
+  }
 
 
   def getScript(name: String) :  Future[Option[CodeSnippet]] = {
