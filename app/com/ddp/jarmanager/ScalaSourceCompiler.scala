@@ -50,8 +50,8 @@ object ScalaSourceCompiler {
 
     jarLoader.addURL(url)
 
-    //FileUtils.forceDelete(targetDir)
-    //FileUtils.forceDelete(new File(jarFile))
+    FileUtils.forceDelete(targetDir)
+    FileUtils.forceDelete(new File(jarFile))
   }
 
 

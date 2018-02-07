@@ -14,7 +14,7 @@ class MongoConnector(url: String) {
 case class UserMovieRating(name: String, rate: Int)
 
 object MongoConnector{
-  def main(args: Array[String]): Unit ={
+  def main(args: Array[String]): Unit = {
     val sc = DataPlatformCoreService.spark.sparkContext
 
     val readConfig = ReadConfig(Map("uri" -> "mongodb://127.0.0.1/ddp.movie_ratings?readPreference=primaryPreferred"))
@@ -24,7 +24,7 @@ object MongoConnector{
 
     // Load the movie rating data
     val movieRatings = MongoSpark.load(sc, readConfig).toDF[UserMovieRating]
-
+    MongoSpark.save(movieRatings, writeConfig)
     println("hello")
   }
 }
