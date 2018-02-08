@@ -8,6 +8,4 @@ object DataPlatformCoreService{
   val conf = new SparkConf().setAppName(this.getClass.getCanonicalName).setMaster("local[*]")
   val spark = SparkSession.builder().config(conf).getOrCreate()
   val ssc = new StreamingContext(spark.sparkContext, Seconds(1))
-
-
 }

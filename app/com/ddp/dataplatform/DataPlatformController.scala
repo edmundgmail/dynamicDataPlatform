@@ -38,7 +38,7 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
       val jobActor = system.actorOf(Props(new UserJobActor(params)))
       Future {
           scheduler.createSchedule(entity.name, Some(entity.desc), entity.cronTab)
-          scheduler.schedule(entity.name, jobActor, Tick)
+          scheduler.schedule(entity.name, jobActor, UserJobActor.SayHello("Mike"))
           Ok(s"${entity.name} is scheduled")
       }
     } recover handleException
