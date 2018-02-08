@@ -2,11 +2,12 @@ package com.ddp.dataplatform
 
 import javax.inject.Inject
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Props}
 import akka.stream.Materializer
-import com.ddp.actors.MyWebSocketActor
+import com.ddp.actors.{MyWebSocketActor, UserJobActor}
 import com.ddp.daos.core.ContextHelper
 import com.ddp.daos.exceptions.ServiceException
+import com.ddp.models.UserJobMessages.Tick
 import com.ddp.models._
 import com.ddp.utils.NoCache
 import play.api.Logger
@@ -17,13 +18,25 @@ import play.api.mvc._
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 import org.apache.spark.sql.execution.datasources._
+
+import com.typesafe.akka.extension.quartz.QuartzSchedulerExtension
+
 class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlService, scalaService: DataPlatformScalaService, system: ActorSystem, materializer: Materializer) extends Controller with ContextHelper with SameOriginCheck {
 
-    private def handleException: PartialFunction[Throwable, Result] = {
+  val scheduler = QuartzSchedulerExtension(system)
+
+  private def handleException: PartialFunction[Throwable, Result] = {
       case e : ServiceException => BadRequest(e.message)
       case t: Throwable =>   {t.printStackTrace; BadRequest(t.getMessage)}
       case _ => BadRequest("Unknown Exception")
     }
+
+  def createJob (name: String, cronTab: String, desc: String) = {
+    val params = UserJobInputDBParam("a")
+    val jobActor = system.actorOf(Props(new UserJobActor(params)))
+    scheduler.createSchedule(name, Some(desc), cronTab)
+    scheduler.schedule(name, jobActor, Tick)
+   }
 
 
     def createOrUpdateSqlScript = Action.async(parse.json) {implicit request =>

@@ -16,5 +16,6 @@ POST        /sp/scala/run                               com.ddp.dataplatform.Dat
 POST        /sp/scala/script                                com.ddp.dataplatform.DataPlatformController.createOrUpdateScalaScript
 GET         /sp/scala/script                           com.ddp.dataplatform.DataPlatformController.getAllScalaScript
 GET         /sp/scala/script/:name                               com.ddp.dataplatform.DataPlatformController.getScalaScript(name:String)
+POST        /job                                       com.ddp.dataplatform.DataPlatformController
 
 GET         /*file                                      com.ddp.dataplatform.Static.at(path="/public", file)

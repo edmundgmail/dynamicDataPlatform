@@ -45,6 +45,7 @@ libraryDependencies ++= Seq(
   ////"spark.jobserver" %% "job-server-api" % "0.8.0" % "provided",
   "com.databricks" % "spark-avro_2.11" % "3.2.0",
   "com.hortonworks" % "shc" % "1.1.2-2.2-s_2.11-SNAPSHOT" from "file:/lib/shc-core-1.1.2-2.2-s_2.11-SNAPSHOT.jar",
+  "com.enragedginger" %% "akka-quartz-scheduler" % "1.6.0-akka-2.4.x",
    ws,
   filters,
   cache)

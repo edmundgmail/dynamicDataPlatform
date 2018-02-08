@@ -9,4 +9,5 @@ object DataPlatformCoreService{
   val spark = SparkSession.builder().config(conf).getOrCreate()
   val ssc = new StreamingContext(spark.sparkContext, Seconds(1))
 
+
 }
