@@ -31,11 +31,17 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
       case _ => BadRequest("Unknown Exception")
     }
 
-  def createJob (name: String, cronTab: String, desc: String) = {
-    val params = UserJobInputDBParam("a")
-    val jobActor = system.actorOf(Props(new UserJobActor(params)))
-    scheduler.createSchedule(name, Some(desc), cronTab)
-    scheduler.schedule(name, jobActor, Tick)
+  def createJob =  Action.async(parse.json) {implicit request =>
+    validateAndThen[UserJobInfo] {
+      entity =>
+      val params = UserJobInputDBParam("a")
+      val jobActor = system.actorOf(Props(new UserJobActor(params)))
+      Future {
+          scheduler.createSchedule(entity.name, Some(entity.desc), entity.cronTab)
+          scheduler.schedule(entity.name, jobActor, Tick)
+          Ok(s"${entity.name} is scheduled")
+      }
+    } recover handleException
    }
 
 
