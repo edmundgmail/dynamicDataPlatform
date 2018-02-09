@@ -9,7 +9,6 @@ import com.ddp.utils.ContextURLClassLoader
 import com.twitter.util.Eval
 import org.apache.commons.io.FileUtils
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.status.api.v1.JobData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
