@@ -1,5 +1,6 @@
 package com.ddp.dataplatform
 
+import java.util.UUID
 import javax.inject.Inject
 
 import akka.actor.{ActorSystem, Props}
@@ -18,12 +19,13 @@ import play.api.mvc._
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 import org.apache.spark.sql.execution.datasources._
-
 import com.typesafe.akka.extension.quartz.QuartzSchedulerExtension
 
 class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlService, scalaService: DataPlatformScalaService, system: ActorSystem, materializer: Materializer) extends Controller with ContextHelper with SameOriginCheck {
 
   val scheduler = QuartzSchedulerExtension(system)
+
+  def generateUniqueId = UUID.randomUUID().toString
 
   private def handleException: PartialFunction[Throwable, Result] = {
       case e : ServiceException => BadRequest(e.message)
@@ -94,6 +96,8 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
             case Failure(e) => BadRequest( s"Message: ${e.getMessage}, cause=${e.getCause}")
           }
         }
+
+
       }
     } recover handleException
   })

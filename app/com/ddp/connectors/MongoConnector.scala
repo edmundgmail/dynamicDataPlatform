@@ -7,9 +7,6 @@ import com.mongodb.spark.config.{ReadConfig, WriteConfig}
 /**
   * Created by eguo on 2/2/18.
   */
-class MongoConnector(url: String) {
-
-}
 
 case class UserMovieRating(name: String, rate: Int)
 

@@ -1,24 +1,18 @@
 package com.ddp.jarmanager
 
 import java.io._
-import java.lang.reflect.Method
-import java.net.{URL, URLClassLoader}
-import java.util.concurrent.Executors.newFixedThreadPool
+import java.net.URL
 
 import com.ddp.models.CodeSnippet
-import com.ddp.user.SparkJobBase
+import com.ddp.user.SparkJobApi
 import com.ddp.utils.ContextURLClassLoader
 import com.twitter.util.Eval
-import org.apache.commons.io.{FileUtils, IOUtils}
-import org.apache.hadoop
-import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.commons.io.FileUtils
 import org.apache.spark.sql.SparkSession
-import play.api.libs.json.{JsObject, JsValue}
+import org.apache.spark.status.api.v1.JobData
 
-import scala.collection.mutable
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.Random
+import scala.concurrent.Future
 /**
   * Created by cloudera on 9/3/16.
   */
@@ -62,8 +56,8 @@ object ScalaSourceCompiler {
 
     Future{
       Thread.currentThread.setContextClassLoader(jarLoader)
-      val method = jarLoader.loadClass(name).getDeclaredMethod(func)
-      method.invoke(spark)
+      val instance = jarLoader.loadClass(name).asInstanceOf[SparkJobApi]
+      instance.runJob(spark)
     }
   }
 
