@@ -1,4 +1,4 @@
-package com.ddp.user
+package com.ddp.userapi
 
 import org.apache.spark.sql.SparkSession
 
