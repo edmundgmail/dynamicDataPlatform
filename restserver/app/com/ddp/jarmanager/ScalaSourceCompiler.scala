@@ -4,6 +4,7 @@ import java.io._
 import java.net.URL
 
 import com.ddp.models.CodeSnippet
+import com.ddp.user.SparkJobApi
 import com.ddp.utils.ContextURLClassLoader
 import com.twitter.util.Eval
 import org.apache.commons.io.FileUtils
@@ -11,10 +12,11 @@ import org.apache.spark.sql.SparkSession
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import com.ddp.userapi.SparkJobApi
 /**
   * Created by cloudera on 9/3/16.
-*/
+  */
+
+
 
 object ScalaSourceCompiler {
 

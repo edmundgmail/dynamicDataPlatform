@@ -1,5 +1,4 @@
 package com.ddp.user
-import com.ddp.userapi.SparkJobApi
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
@@ -19,6 +18,8 @@ class MyClass5 extends SparkJobApi {
 }
 
 object SparkJobTest {
+
+
 
   def main(args:Array[String]): Unit = {
     val conf = new SparkConf().setMaster("local[*]").setAppName("SparkJobTest")
