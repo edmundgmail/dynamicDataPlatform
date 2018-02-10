@@ -15,8 +15,8 @@ trait TestHelper extends FlatSpec with ScalaFutures {
 
   override def withFixture(test: NoArgTest) = {
     // Perform setup
-    JsonFixtures.apply.removeAll("test/resources/resetData.conf").futureValue
-    JsonFixtures.apply.load("test/resources/users.conf").futureValue
+    JsonFixtures.apply.removeAll("resources/resetData.conf").futureValue
+    JsonFixtures.apply.load("resources/users.conf").futureValue
     try super.withFixture(test) // Invoke the test function
     finally {
       // Perform cleanup
