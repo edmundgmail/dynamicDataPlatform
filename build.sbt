@@ -30,31 +30,21 @@ lazy val commonSettings = Seq(
 
 
 val userapiDependencies = Seq(
-  "org.apache.spark" % "spark-core_2.11" % versions("spark") % "compile",
-  "org.apache.spark" % "spark-sql_2.11" % versions("spark") % "compile",
-  "org.apache.spark" % "spark-streaming_2.11" % versions("spark") % "compile",
-  "org.mongodb.spark" % "mongo-spark-connector_2.11" % versions("spark") % "compile",
-  "com.oracle" % "ojdbc6" % "11.2.0.4"  from "file:/lib/ojdbc6-11.2.0.4.jar",
-  "com.microsoft.sqlserver" % "mssql-jdbc" % "6.2.1.jre8" % "provided",
-  "mysql" % "mysql-connector-java" % "5.1.45" % "provided",
-  ////"spark.jobserver" %% "job-server-api" % "0.8.0" % "provided",
-  "com.databricks" % "spark-avro_2.11" % "3.2.0"  % "provided"
+  "org.apache.spark" % "spark-core_2.11" % versions("spark") % "provided",
+  "org.apache.spark" % "spark-sql_2.11" % versions("spark") % "provided",
+  "org.apache.spark" % "spark-streaming_2.11" % versions("spark") % "provided"
 )
 
 val restDependencies = Seq(
-  "org.apache.spark" % "spark-core_2.11" % versions("spark") exclude("org.slf4j", "slf4j-api"),
-  "org.apache.spark" % "spark-sql_2.11" % versions("spark") % "compile" exclude("org.slf4j", "slf4j-api"),
+  "org.apache.spark" % "spark-core_2.11" % versions("spark"),
+  "org.apache.spark" % "spark-sql_2.11" % versions("spark") % "compile",
   "org.apache.spark" % "spark-streaming_2.11" % versions("spark") % "compile",
-  "org.mongodb.spark" % "mongo-spark-connector_2.11" % versions("spark") % "compile" exclude("org.slf4j", "slf4j-api"),
-  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.13" exclude("org.slf4j", "slf4j-api"),
+  "org.mongodb.spark" % "mongo-spark-connector_2.11" % versions("spark") % "compile",
+  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.13",
   "org.reactivemongo" %% "reactivemongo-play-json" % "0.11.14" % "compile",
-  "org.codehaus.janino" % "janino" % "3.0.7",
-  "com.julianpeeters" % "case-class-generator_2.11" % "0.7.1",
   "org.mockito" % "mockito-core" % "1.10.19" % Test,
   "org.scalatestplus.play" % "scalatestplus-play_2.11" % "1.5.1" % Test,
   "com.twitter" %% "util-eval" % "6.43.0",
-  "com.chuusai"   %% "shapeless"     % "2.3.2",
-  "com.hortonworks" % "shc" % "1.1.2-2.2-s_2.11-SNAPSHOT" from "file:/lib/shc-core-1.1.2-2.2-s_2.11-SNAPSHOT.jar",
   "com.enragedginger" %% "akka-quartz-scheduler" % "1.6.0-akka-2.4.x",
 
   "com.oracle" % "ojdbc6" % "11.2.0.4"  from "file:/lib/ojdbc6-11.2.0.4.jar",
@@ -72,6 +62,7 @@ lazy val userapi = project.in(file("userapi"))
   .settings(commonSettings: _*)
   .settings(
     version := "0.1",
+    name := "userapi",
     libraryDependencies ++= userapiDependencies
   )
 
@@ -80,6 +71,7 @@ lazy val restserver = project.in(file("restserver"))
   .settings(commonSettings: _*)
   .settings(
     version := "0.1",
+    name := "restserver",
     libraryDependencies ++= restDependencies
   )
   .dependsOn(userapi % "compile->compile;test->test")
