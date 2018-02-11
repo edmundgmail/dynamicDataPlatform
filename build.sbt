@@ -89,5 +89,5 @@ lazy val  root = project.in(file("."))
   .aggregate(userapi, restserver)
 
 projectDependencies := {
-  Seq((projectID in root).value.exclude("org.slf4j", "slf4j-log4j12"))
+  Seq((projectID in root).value.exclude("org.slf4j", "slf4j-log4j12").exclude("org.slf4j", "slf4j-api"))
 }
