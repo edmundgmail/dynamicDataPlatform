@@ -3,7 +3,7 @@ package com.ddp.dataplatform
 import javax.inject.{Inject, Singleton}
 
 import com.ddp.jarmanager.ScalaSourceCompiler
-import com.ddp.models.{CodeSnippet, ScriptSimple}
+import com.ddp.models.{CodeSnippet, ScriptSimple, UserJobFailureStatus, UserJobStatus}
 import play.api.Logger
 import play.api.libs.json.Json
 
@@ -23,9 +23,10 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
 
   def sparkRun(entity: CodeSnippet) = {
     try{
+      val uuid = DataPlatformCoreService.generateUniqueId
       ScalaSourceCompiler.compile(spark, entity)
       val ret = ScalaSourceCompiler.run(entity.name)(spark)
-      Success(ret)
+       Success(UserJobStatus(entity.name, "scala",  uuid, "Submitted"))
     }
     catch {
       case e => Failure(e)

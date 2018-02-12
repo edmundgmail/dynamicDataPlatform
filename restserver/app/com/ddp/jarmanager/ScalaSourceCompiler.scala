@@ -46,7 +46,7 @@ object ScalaSourceCompiler {
   }
 
 
-  def run(name:String, func: String = "runJob")(implicit spark:SparkSession) = {
+  def run(name:String)(implicit spark:SparkSession) = {
     //val instance = classLoader.getConstructor(classOf[SparkSession]).newInstance(spark)
    // val method: Method = classLoader.getDeclaredMethod(func)
     //method.invoke(instance)

@@ -25,8 +25,6 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
 
   val scheduler = QuartzSchedulerExtension(system)
 
-  def generateUniqueId = UUID.randomUUID().toString
-
   private def handleException: PartialFunction[Throwable, Result] = {
       case e : ServiceException => BadRequest(e.message)
       case t: Throwable =>   {t.printStackTrace; BadRequest(t.getMessage)}
@@ -92,8 +90,11 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
 
         Future{
           scalaService.sparkRun(entity) match {
-            case Success(e) => Ok(e.toString)
-            case Failure(e) => BadRequest( s"Message: ${e.getMessage}, cause=${e.getCause}")
+            case Success(e) => Ok(Json.toJson(Some(e)))
+            case Failure(e) => {
+              val ret = UserJobFailureStatus(entity.name, "scala", e.getMessage, e.getCause.toString)
+              BadRequest(Json.toJson(Some(ret)))
+            } //BadRequest( s"Message: ${e.getMessage}, cause=${e.getCause}")
           }
         }
 
