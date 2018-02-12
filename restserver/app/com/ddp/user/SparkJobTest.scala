@@ -1,7 +1,8 @@
 package com.ddp.user
-import com.ddp.userapi.SparkJobApi
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
+import com.ddp.userapi.SparkJobApi
+
 
 /**
   * Created by eguo on 2/9/18.

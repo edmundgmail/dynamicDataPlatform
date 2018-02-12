@@ -52,6 +52,7 @@ val restDependencies = Seq(
   "mysql" % "mysql-connector-java" % "5.1.45",
   ////"spark.jobserver" %% "job-server-api" % "0.8.0" % "provided",
   "com.databricks" % "spark-avro_2.11" % "3.2.0",
+  "com.ddp" % "userapi_2.11" % "0.1" from "file:/lib/userapi_2.11-0.1.jar",
     ws,
   filters,
   cache
@@ -74,12 +75,9 @@ lazy val restserver = project.in(file("restserver"))
     name := "restserver",
     libraryDependencies ++= restDependencies
   )
-  .dependsOn(userapi % "compile->compile;test->test")
+  //.dependsOn(userapi % "compile->compile;test->test")
 
 
 lazy val  root = project.in(file("."))
   .aggregate(userapi, restserver)
 
-projectDependencies := {
-  Seq((projectID in root).value.exclude("org.slf4j", "slf4j-log4j12").exclude("org.slf4j", "slf4j-api"))
-}
