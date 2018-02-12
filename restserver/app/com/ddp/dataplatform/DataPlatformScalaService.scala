@@ -3,7 +3,7 @@ package com.ddp.dataplatform
 import javax.inject.{Inject, Singleton}
 
 import com.ddp.jarmanager.ScalaSourceCompiler
-import com.ddp.models.{CodeSnippet, ScriptSimple, UserJobFailureStatus, UserJobStatus}
+import com.ddp.models.{CodeSnippet, ScriptSimple, UserJobStatus}
 import play.api.Logger
 import play.api.libs.json.Json
 

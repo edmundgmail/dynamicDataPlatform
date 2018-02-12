@@ -94,7 +94,9 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
               val s = Json.toJson(res)
               Ok(s)
             }
-            case Failure(e) => BadRequest( s"Message: ${e.getMessage}, cause=${e.getCause}")
+            case Failure(e) => {
+              BadRequest(s"Message: ${e.getMessage}, cause=${e.getCause}")
+            }
           }
         }
 
