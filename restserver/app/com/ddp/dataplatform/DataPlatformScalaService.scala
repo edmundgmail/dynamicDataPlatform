@@ -25,7 +25,7 @@ class DataPlatformScalaService @Inject()(scalaScriptRepository: ScalaScriptRepos
     try{
       val uuid = DataPlatformCoreService.generateUniqueId
       ScalaSourceCompiler.compile(spark, entity)
-      val ret = ScalaSourceCompiler.run(entity.name)(spark)
+      ScalaSourceCompiler.run(entity.name)(spark)
        Success(UserJobStatus(entity.name, "scala",  uuid, "Submitted"))
     }
     catch {

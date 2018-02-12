@@ -83,25 +83,25 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
   }
 
 
-  def sparkRunScala= NoCache (Action.async (parse.json) { implicit request =>
+  def sparkRunScala= Action.async (parse.json) { implicit request =>
     validateAndThen[CodeSnippet] {
       entity => {
         Logger.logger.info(s"entity=${entity.name}, content=${entity.content}");
 
         Future{
           scalaService.sparkRun(entity) match {
-            case Success(e) => Ok(Json.toJson(Some(e)))
-            case Failure(e) => {
-              val ret = UserJobFailureStatus(entity.name, "scala", e.getMessage, e.getCause.toString)
-              BadRequest(Json.toJson(Some(ret)))
-            } //BadRequest( s"Message: ${e.getMessage}, cause=${e.getCause}")
+            case Success(res) => {
+              val s = Json.toJson(res)
+              Ok(s)
+            }
+            case Failure(e) => BadRequest( s"Message: ${e.getMessage}, cause=${e.getCause}")
           }
         }
 
 
       }
     } recover handleException
-  })
+  }
 
 
 
