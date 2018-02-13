@@ -7,6 +7,5 @@ import org.apache.spark.sql.SparkSession
   */
 trait SparkJobApi {
   type JobOutput
-  type JobData
   def runJob(spark: SparkSession) : JobOutput
 }

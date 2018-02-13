@@ -1,7 +1,12 @@
 package com.ddp.user
+import com.ddp.jarmanager.ScalaSourceCompiler
+import com.ddp.models.CodeSnippet
+import com.ddp.userapi.SparkJobApi
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
-import com.ddp.userapi.SparkJobApi
+
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 
 /**
@@ -25,8 +30,30 @@ object SparkJobTest {
     val conf = new SparkConf().setMaster("local[*]").setAppName("SparkJobTest")
     val spark = SparkSession.builder().config(conf).getOrCreate()
 
-     val class5 = new MyClass5
-
-     println(class5.runJob(spark).mkString(","))
+    val name = "com.ddp.user.MyClass5"
+    val code =
+      """
+        |package com.ddp.user
+        |import org.apache.spark.sql.SparkSession
+        |import com.ddp.userapi.SparkJobApi
+        |
+        |case class Student(name: String, age: Int)
+        |
+        |class MyClass5 extends SparkJobApi {
+        |
+        |  type JobOutput =  List[Student]
+        |
+        |  def runJob(spark: SparkSession) : JobOutput = {
+        |    val ret = List(Student("edmund", 1))
+        |    println(ret)
+        |    ret
+        |  }
+        |}
+      """.stripMargin
+    val snippets = CodeSnippet(name, code)
+    ScalaSourceCompiler.compile(spark, snippets)
+    val x = ScalaSourceCompiler.run(name)(spark)
+    //val y = Await.ready(x, Duration.Inf)
+    println(x)
   }
 }
