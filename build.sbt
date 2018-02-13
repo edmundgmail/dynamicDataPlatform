@@ -28,17 +28,15 @@ lazy val commonSettings = Seq(
   buildInfoPackage := "build"
 )
 
+val sparkCore = "org.apache.spark" % "spark-core_2.11" % versions("spark")
+val sparkSql = "org.apache.spark" % "spark-sql_2.11" % versions("spark")
+val sparkStream = "org.apache.spark" % "spark-streaming_2.11" % versions("spark")
 
-val userapiDependencies = Seq(
-  "org.apache.spark" % "spark-core_2.11" % versions("spark") % "provided",
-  "org.apache.spark" % "spark-sql_2.11" % versions("spark") % "provided",
-  "org.apache.spark" % "spark-streaming_2.11" % versions("spark") % "provided"
-)
+
+val userapiDependencies = Seq(sparkCore,sparkSql,sparkStream)
 
 val restDependencies = Seq(
-  "org.apache.spark" % "spark-core_2.11" % versions("spark"),
-  "org.apache.spark" % "spark-sql_2.11" % versions("spark") % "compile",
-  "org.apache.spark" % "spark-streaming_2.11" % versions("spark") % "compile",
+  sparkCore,sparkSql,sparkStream,
   "org.mongodb.spark" % "mongo-spark-connector_2.11" % versions("spark") % "compile",
   "org.reactivemongo" %% "play2-reactivemongo" % "0.11.13",
   "org.reactivemongo" %% "reactivemongo-play-json" % "0.11.14" % "compile",
@@ -67,9 +65,13 @@ lazy val userapi = project.in(file("userapi"))
     libraryDependencies ++= userapiDependencies
   )
 
+def excludeJackson(module: ModuleID): ModuleID =
+  module.excludeAll(ExclusionRule(organization = "com.fasterxml.jackson.core"))
+
 lazy val restserver = project.in(file("restserver"))
   .enablePlugins(PlayScala,BuildInfoPlugin)
   .settings(commonSettings: _*)
+  .settings(libraryDependencies ~= (_.map(excludeJackson)))
   .settings(
     version := "0.1",
     name := "restserver",

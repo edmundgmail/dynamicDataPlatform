@@ -39,10 +39,9 @@ object ScalaSourceCompiler {
 
     val jarFile = CreateJarFile.mkJar(targetDir, sources.name)
     spark.sparkContext.addJar(jarFile)
-
     jarLoader.addURL(url)
 
-    //FileUtils.forceDelete(targetDir)
+    FileUtils.forceDelete(targetDir)
     //FileUtils.forceDelete(new File(jarFile))
   }
 

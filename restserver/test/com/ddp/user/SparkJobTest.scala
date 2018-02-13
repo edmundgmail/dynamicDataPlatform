@@ -5,9 +5,6 @@ import com.ddp.userapi.SparkJobApi
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-
 
 /**
   * Created by eguo on 2/9/18.
