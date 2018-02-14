@@ -1,19 +1,19 @@
 package com.ddp.user
 
 import com.ddp.connectors.FileConnector
-import com.ddp.user123.{Student1, TestCsvFile}
 import com.ddp.userapi.SparkJobApi
 import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config.{ReadConfig, WriteConfig}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{Row, SparkSession}
+import ste.StructTypeEncoder
 
 case class Security(Date_Time_Stamp: String, Exchange_Rate: String)
 
 class TestJsonFile extends SparkJobApi{
   override type JobOutput = List[Row]
   override def runJob(spark: SparkSession): JobOutput = {
-    val conn = FileConnector[Security]("restserver/test/resources/sample.json", "json", spark)
+    val conn = FileConnector("restserver/test/resources/sample.json", "json", spark, Some("Date_Time_Stamp varchar(100), Exchange_Rate Decimal(10,3)"))
     conn.registerTempTable("temp123")
     val filtered = spark.sql("describe temp123")
     //filtered.collect.toList

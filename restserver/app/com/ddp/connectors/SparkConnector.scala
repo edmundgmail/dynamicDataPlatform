@@ -5,7 +5,8 @@ import java.util.Properties
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 
-trait SparkConnector[T] {
+trait SparkConnector {
+  type T
   val spark: SparkSession
   val properties : Properties
   //def getRDD[T]: RDD[T]

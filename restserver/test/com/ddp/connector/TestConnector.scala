@@ -19,7 +19,7 @@ class TestConnector extends Testing{
     properties.setProperty("url", "jdbc:oracle:thin:rbc_ces_user/Password1@localhost:1521:orcl")
     properties.setProperty("query","(select ID, SEDOL from SEC_POSITION_SUMMARY) summary_alias")
     import spark.implicits._
-    val conn = new JDBCSparkConnector[Security](spark,properties)
+    val conn = new JDBCSparkConnector(spark,properties)
     conn.registerTempTable("test1")
     spark.sql("select * from test1").show(10)
 
@@ -33,7 +33,7 @@ class TestConnector extends Testing{
 
     properties.setProperty("query","(select ID, SEDOL from SEC_POSITION_SUMMARY) summary_alias")
     import spark.implicits._
-    val conn = new JDBCSparkConnector[Security](spark,properties)
+    val conn = new JDBCSparkConnector(spark,properties)
     conn.registerTempTable("test1")
     spark.sql("select * from test1").show(10)
 

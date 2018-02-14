@@ -12,7 +12,7 @@ lazy val versions = Map(
   "hbase" -> "1.1.2",
   "hadoop" -> "2.7.1",
   "jackson" -> "2.8.4",
-  "spark" -> "2.1.0",
+  "spark" -> "2.2.1",
   "elasticsearch" -> "6.1.0"
 )
 
@@ -28,12 +28,15 @@ lazy val commonSettings = Seq(
   buildInfoPackage := "build"
 )
 
-val sparkCore = "org.apache.spark" % "spark-core_2.11" % versions("spark")
-val sparkSql = "org.apache.spark" % "spark-sql_2.11" % versions("spark")
-val sparkStream = "org.apache.spark" % "spark-streaming_2.11" % versions("spark")
+val sparkCoreProvided = "org.apache.spark" % "spark-core_2.11" % versions("spark") % "provided" //from "file:/lib/spark-core_2.11-2.2.1.jar"
+val sparkSqlProvided = "org.apache.spark" % "spark-sql_2.11" % versions("spark")  % "provided"  //from "file:/lib/spark-sql_2.11-2.2.1.jar"
+val sparkStreamProvided = "org.apache.spark" % "spark-streaming_2.11" % versions("spark") % "provided" //from "file:/lib/spark-streaming_2.11-2.2.1.jar"
 
+val sparkCore = "org.apache.spark" % "spark-core_2.11" % versions("spark") //from "file:/lib/spark-core_2.11-2.2.1.jar"
+val sparkSql = "org.apache.spark" % "spark-sql_2.11" % versions("spark") //from "file:/lib/spark-sql_2.11-2.2.1.jar"
+val sparkStream = "org.apache.spark" % "spark-streaming_2.11" % versions("spark") //from "file:/lib/spark-streaming_2.11-2.2.1.jar"
 
-val userapiDependencies = Seq(sparkCore,sparkSql,sparkStream)
+val userapiDependencies = Seq(sparkCoreProvided,sparkSqlProvided,sparkStreamProvided)
 
 val restDependencies = Seq(
   sparkCore,sparkSql,sparkStream,
@@ -51,6 +54,8 @@ val restDependencies = Seq(
   ////"spark.jobserver" %% "job-server-api" % "0.8.0" % "provided",
   "com.databricks" % "spark-avro_2.11" % "3.2.0",
   "com.ddp" % "userapi_2.11" % "0.1" from "file:/lib/userapi_2.11-0.1.jar",
+  "com.github.benfradet" %% "struct-type-encoder" % "0.1.0",
+  "com.julianpeeters" %% "case-class-generator" % "0.7.1",
     ws,
   filters,
   cache
