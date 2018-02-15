@@ -13,17 +13,15 @@ import ste.StructTypeEncoder
 case class Student1(id: Int, name: String, age: Int)
 
 class TestCsvFile extends SparkJobApi {
-
-  type JobOutput = List[Row]
-
+  override type JobOutput = List[Student1]
   def runJob(spark: SparkSession): JobOutput = {
 
-    val conn = FileConnector("restserver/test/resources/sample.csv", "csv", spark, None)
+    val conn = FileConnector("restserver/test/resources/sample.csv", "csv", spark, "id int, name varchar(100), age int")
     import spark.sqlContext._
 
     conn.registerTempTable("temp123")
-    val filtered = spark.sql("describe temp123")
-    filtered.collect().toList
+import spark.implicits._
+    conn.df.as[Student1].collect.toList
   }
 }
 

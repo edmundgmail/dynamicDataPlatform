@@ -11,19 +11,21 @@ import ste.StructTypeEncoder
 case class Security(Date_Time_Stamp: String, Exchange_Rate: String)
 
 class TestJsonFile extends SparkJobApi{
-  override type JobOutput = List[Row]
+  override type JobOutput = List[Security]
   override def runJob(spark: SparkSession): JobOutput = {
-    val conn = FileConnector("restserver/test/resources/sample.json", "json", spark, Some("Date_Time_Stamp varchar(100), Exchange_Rate Decimal(10,3)"))
+    val conn = FileConnector("restserver/test/resources/sample.json", "json", spark, "Date_Time_Stamp varchar(100), Exchange_Rate Decimal(10,3)")
     conn.registerTempTable("temp123")
-    val filtered = spark.sql("describe temp123")
     //filtered.collect.toList
+    import spark.implicits._
 
+    conn.df.as[Security].collect().toList
+    /*
     val readConfig = ReadConfig(Map("uri" -> "mongodb://127.0.0.1/ddp.securities?readPreference=primaryPreferred"))
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://127.0.0.1/ddp.securities"))
 
     MongoSpark.save(filtered, writeConfig)
-    val rdd = MongoSpark.load(spark, readConfig)
-    rdd.collect().toList
+    val rdd = MongoSpark.load(spark, readConfig)*/
+    //conn.df.as[Security].collect().toList
   }
 }
 
