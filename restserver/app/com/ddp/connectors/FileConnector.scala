@@ -4,10 +4,6 @@ import java.util.Properties
 
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import ste.StructTypeEncoder
-import ste.StructTypeEncoder._
-import com.julianpeeters.caseclass.generator._
-import scala.reflect.runtime.universe._
 
 /**
   * Created by eguo on 2/1/18.

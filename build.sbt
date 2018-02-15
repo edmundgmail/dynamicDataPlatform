@@ -32,9 +32,9 @@ val sparkCoreProvided = "org.apache.spark" % "spark-core_2.11" % versions("spark
 val sparkSqlProvided = "org.apache.spark" % "spark-sql_2.11" % versions("spark")  % "provided"  //from "file:/lib/spark-sql_2.11-2.2.1.jar"
 val sparkStreamProvided = "org.apache.spark" % "spark-streaming_2.11" % versions("spark") % "provided" //from "file:/lib/spark-streaming_2.11-2.2.1.jar"
 
-val sparkCore = "org.apache.spark" % "spark-core_2.11" % versions("spark") //from "file:/lib/spark-core_2.11-2.2.1.jar"
-val sparkSql = "org.apache.spark" % "spark-sql_2.11" % versions("spark") //from "file:/lib/spark-sql_2.11-2.2.1.jar"
-val sparkStream = "org.apache.spark" % "spark-streaming_2.11" % versions("spark") //from "file:/lib/spark-streaming_2.11-2.2.1.jar"
+val sparkCore = "org.apache.spark" % "spark-core_2.11" % versions("spark") from "file:/lib/spark-core_2.11-2.2.1.jar"
+val sparkSql = "org.apache.spark" % "spark-sql_2.11" % versions("spark") from "file:/lib/spark-sql_2.11-2.2.1.jar"
+val sparkStream = "org.apache.spark" % "spark-streaming_2.11" % versions("spark") from "file:/lib/spark-streaming_2.11-2.2.1.jar"
 
 val userapiDependencies = Seq(sparkCoreProvided,sparkSqlProvided,sparkStreamProvided)
 
@@ -54,9 +54,6 @@ val restDependencies = Seq(
   ////"spark.jobserver" %% "job-server-api" % "0.8.0" % "provided",
   "com.databricks" % "spark-avro_2.11" % "3.2.0",
   "com.ddp" % "userapi_2.11" % "0.1" from "file:/lib/userapi_2.11-0.1.jar",
-  "com.github.benfradet" %% "struct-type-encoder" % "0.1.0",
-  "com.julianpeeters" %% "case-class-generator" % "0.7.1",
-  "it.nerdammer.bigdata" % "spark-hbase-connector_2.10" % "1.0.3",
   "com.hortonworks" % "shc" % "1.1.2-2.2-s_2.11-SNAPSHOT" from "file:/lib/shc-core-1.1.2-2.2-s_2.11-SNAPSHOT.jar",
     ws,
   filters,
