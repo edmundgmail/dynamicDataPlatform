@@ -1,7 +1,9 @@
 package com.ddp.connectors
 
-import java.util.Properties
+import java.util.{Properties, UUID}
 
+import com.mongodb.spark.MongoSpark
+import com.mongodb.spark.config.WriteConfig
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.types.StructType
@@ -18,15 +20,21 @@ class HBaseConnector (val spark: SparkSession, val properties: Properties, val s
 
 object HBaseConnector{
   def main(args: Array[String]): Unit = {
-    val sparkConf = new SparkConf()
-    sparkConf.set("spark.hbase.host", "localhost").setMaster("local[*]").setAppName("test1")
-    val sc = new SparkContext(sparkConf)
-    val rdd = sc.parallelize(1 to 100)
-      .map(i => (i.toString, i+1, "Hello"))
+    val tables: Seq[String] = Seq(UUID.randomUUID().toString)
+    val columnFamilies: Seq[String] = Seq(UUID.randomUUID().toString, UUID.randomUUID().toString)
 
-    rdd.toHBaseTable("mytable")
-      .toColumns("column1", "column2")
-      .inColumnFamily("mycf")
+    tables foreach {IntegrationUtils.createTable(_, columnFamilies)}
+
+    val sc = IntegrationUtils.sparkContext
+
+    val data = sc.parallelize(1 to 100).map(i => (i.toString, i.toString, i))
+
+
+    data.toHBaseTable(tables(0))
+      .toColumns("column1", columnFamilies(1) + ":column2")
+      .inColumnFamily(columnFamilies(0))
       .save()
+
+
   }
 }

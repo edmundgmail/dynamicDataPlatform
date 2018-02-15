@@ -56,7 +56,7 @@ val restDependencies = Seq(
   "com.ddp" % "userapi_2.11" % "0.1" from "file:/lib/userapi_2.11-0.1.jar",
   "com.github.benfradet" %% "struct-type-encoder" % "0.1.0",
   "com.julianpeeters" %% "case-class-generator" % "0.7.1",
-  "it.nerdammer.bigdata" % "spark-hbase-connector_2.10" % "1.0.3",
+  "it.nerdammer.bigdata" % "spark-hbase-connector_2.11" % "1.0.4" from "file:/lib/spark-hbase-connector_2.11.jar",
   "com.hortonworks" % "shc" % "1.1.2-2.2-s_2.11-SNAPSHOT" from "file:/lib/shc-core-1.1.2-2.2-s_2.11-SNAPSHOT.jar",
     ws,
   filters,

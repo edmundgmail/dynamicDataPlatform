@@ -8,6 +8,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql.{Row, SparkSession}
 import ste.StructTypeEncoder
 import it.nerdammer.spark.hbase._
+import org.apache.spark.rdd.RDD
 
 case class Security(Date_Time_Stamp: String, Exchange_Rate: String)
 
@@ -17,6 +18,15 @@ class TestJsonFile extends SparkJobApi{
     val conn = FileConnector("restserver/test/resources/sample.json", "json", spark, "Date_Time_Stamp varchar(100), Exchange_Rate Decimal(10,3)")
     conn.registerTempTable("temp123")
     //filtered.collect.toList
+    //val rdd: RDD[Row] = conn.df.rdd
+
+    val rdd = spark.sparkContext.parallelize(1 to 100)
+
+   rdd.toHBaseTable("mytable")
+  .toColumns("column1", "column2")
+  .inColumnFamily("mycf")
+  .save()
+
     import spark.implicits._
 
     conn.df.as[Security].collect().toList
