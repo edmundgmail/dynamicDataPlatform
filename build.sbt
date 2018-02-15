@@ -1,6 +1,7 @@
 import sbt.Keys.{javacOptions, libraryDependencies}
 
-val repositories = Seq("scalaz-bintray" at "https://dl.bintray.com/scalaz/releases")
+val repositories = Seq("scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
+  "hortonworks-repo" at "http://repo.hortonworks.com/content/repositories/releases")
 name := "dynamicDataPlatform"
 
 version := "0.1"
@@ -56,6 +57,8 @@ val restDependencies = Seq(
   "com.ddp" % "userapi_2.11" % "0.1" from "file:/lib/userapi_2.11-0.1.jar",
   "com.github.benfradet" %% "struct-type-encoder" % "0.1.0",
   "com.julianpeeters" %% "case-class-generator" % "0.7.1",
+  "it.nerdammer.bigdata" % "spark-hbase-connector_2.10" % "1.0.3",
+  "com.hortonworks" % "shc-core" % "1.1.1-2.1-s_2.11",
     ws,
   filters,
   cache

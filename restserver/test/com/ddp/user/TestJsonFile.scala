@@ -7,6 +7,7 @@ import com.mongodb.spark.config.{ReadConfig, WriteConfig}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{Row, SparkSession}
 import ste.StructTypeEncoder
+import it.nerdammer.spark.hbase._
 
 case class Security(Date_Time_Stamp: String, Exchange_Rate: String)
 
@@ -33,10 +34,12 @@ object TestJsonFile {
   def main(args:Array[String]): Unit = {
     val conf = new SparkConf().setMaster("local[*]").setAppName("SparkJobTest")
     val spark = SparkSession.builder().config(conf).getOrCreate()
+    spark.sparkContext.hadoopConfiguration.set("spark.hbase.host", "localhost")
 
     val test = new TestJsonFile
     val s = test.runJob(spark)
     println(s"result=${s.mkString(",")}")
+
   }
 
 }
