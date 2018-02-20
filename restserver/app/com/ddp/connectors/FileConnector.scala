@@ -33,7 +33,7 @@ object FileConnector{
   }
 
   def apply(path: String, format: String, spark: SparkSession, ddl: String)  : FileConnector = {
-      apply(path, format,spark, Some(StructType.fromDDL(ddl)))
+      apply(path, format,spark, None)
   }
 
   def apply(path: String, format: String ,spark:SparkSession) : FileConnector = {

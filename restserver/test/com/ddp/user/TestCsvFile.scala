@@ -5,7 +5,6 @@ import com.mongodb.spark.MongoSpark
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{Row, SparkSession}
-import ste.StructTypeEncoder
 
 /**
   * Created by eguo on 2/9/18.
