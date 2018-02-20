@@ -40,9 +40,9 @@ val sparkCore = "org.apache.spark" % "spark-core_2.11" % versions("spark") % "co
 val sparkSql = "org.apache.spark" % "spark-sql_2.11" % versions("spark")  % "compile"
 val sparkStream = "org.apache.spark" % "spark-streaming_2.11" % versions("spark")  % "compile"
 val sparkHive = "org.apache.spark" % "spark-hive_2.11" % versions("spark")  % "compile"
-val sparkKafka = "org.apache.spark" % "spark-sql-kafka-0-10_2.11" % versions("spark")
-val sparkKafkaStreaming = "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % versions("spark")
-val kafka = "org.apache.kafka" % "kafka_2.11" % versions("kafka")
+val sparkKafka = "org.apache.spark" % "spark-sql-kafka-0-10_2.11" % versions("spark") % "compile"
+val sparkKafkaStreaming = "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % versions("spark") % "compile"
+val kafka = "org.apache.kafka" % "kafka_2.11" % versions("kafka") % "compile"
 
 val userapiDependencies = Seq(sparkCoreProvided,sparkSqlProvided,sparkStreamProvided, sparkHiveProvided)
 
