@@ -2,31 +2,18 @@ package com.ddp.user
 
 import com.ddp.connectors.FileConnector
 import com.ddp.userapi.SparkJobApi
-import com.mongodb.spark.MongoSpark
-import com.mongodb.spark.config.{ReadConfig, WriteConfig}
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.{Row, SparkSession}
-import ste.StructTypeEncoder
-import it.nerdammer.spark.hbase._
-import org.apache.spark.rdd.RDD
-
+import org.apache.spark.sql.SparkSession
 case class Security(Date_Time_Stamp: String, Exchange_Rate: String)
 
 class TestJsonFile extends SparkJobApi{
   override type JobOutput = List[Security]
   override def runJob(spark: SparkSession): JobOutput = {
-    val conn = FileConnector("restserver/test/resources/sample.json", "json", spark, "Date_Time_Stamp varchar(100), Exchange_Rate Decimal(10,3)")
+    //val conn = FileConnector("restserver/test/resources/sample.json", "json", spark, "Date_Time_Stamp varchar(100), Exchange_Rate Decimal(10,3)")
+    val conn = FileConnector("restserver/test/resources/sample.json", "json", spark)
     conn.registerTempTable("temp123")
     //filtered.collect.toList
     //val rdd: RDD[Row] = conn.df.rdd
-
-    val rdd = spark.sparkContext.parallelize(1 to 100)
-
-   rdd.toHBaseTable("mytable")
-  .toColumns("column1", "column2")
-  .inColumnFamily("mycf")
-  .save()
-
     import spark.implicits._
 
     conn.df.as[Security].collect().toList
@@ -44,7 +31,6 @@ object TestJsonFile {
   def main(args:Array[String]): Unit = {
     val conf = new SparkConf().setMaster("local[*]").setAppName("SparkJobTest")
     val spark = SparkSession.builder().config(conf).getOrCreate()
-    spark.sparkContext.hadoopConfiguration.set("spark.hbase.host", "localhost")
 
     val test = new TestJsonFile
     val s = test.runJob(spark)
