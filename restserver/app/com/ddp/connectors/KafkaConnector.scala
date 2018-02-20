@@ -8,11 +8,14 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 class KafkaConnector (val spark: SparkSession, val properties: Properties) extends SparkConnector{
 
 
-  def getDataframe: DataFrame =
-    spark.readStream.format("kafka")
-    .option(KafkaConnector.BROKERS ,properties.getProperty(KafkaConnector.BROKERS))
-    .option(KafkaConnector.TOPIC, properties.getProperty(KafkaConnector.TOPIC))
-    .load()
+  def getDataframe: DataFrame = {
+    val readStream = spark.readStream.format("kafka")
+      .option(KafkaConnector.BROKERS ,properties.getProperty(KafkaConnector.BROKERS))
+      .option(KafkaConnector.TOPIC, properties.getProperty(KafkaConnector.TOPIC))
+
+    readStream.load()
+    
+  }
 
 }
 
