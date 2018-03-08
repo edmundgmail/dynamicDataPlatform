@@ -14,7 +14,6 @@ class KafkaConnector (val spark: SparkSession, val properties: Properties) exten
       .option(KafkaConnector.TOPIC, properties.getProperty(KafkaConnector.TOPIC))
 
     readStream.load()
-    
   }
 
 }
