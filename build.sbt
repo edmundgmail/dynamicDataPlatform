@@ -56,12 +56,11 @@ val restDependencies = Seq(
   "com.twitter" %% "util-eval" % "6.43.0",
   "com.enragedginger" %% "akka-quartz-scheduler" % "1.6.0-akka-2.4.x",
   "com.google.guava" % "guava" % "16.0.1",
-  "com.oracle" % "ojdbc6" % "11.2.0.4"  from "file:/lib/ojdbc6-11.2.0.4.jar",
   "com.microsoft.sqlserver" % "mssql-jdbc" % "6.2.1.jre8",
   "mysql" % "mysql-connector-java" % "5.1.45",
   "com.databricks" % "spark-avro_2.11" % "3.2.0",
-  "com.ddp" % "userapi_2.11" % "0.1" from "file:/lib/userapi_2.11-0.1.jar",
-    ws,
+  jdbc,
+  ws,
   filters,
   cache
 )
@@ -79,6 +78,7 @@ def excludeJackson(module: ModuleID): ModuleID =
   module.excludeAll(ExclusionRule(organization = "com.fasterxml.jackson.core"))
 
 lazy val restserver = project.in(file("restserver"))
+    .dependsOn(userapi)
   .enablePlugins(PlayScala,BuildInfoPlugin)
   .settings(commonSettings: _*)
   .settings(libraryDependencies ~= (_.map(excludeJackson)))

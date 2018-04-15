@@ -21,7 +21,7 @@ import scala.util.{Failure, Success, Try}
 import org.apache.spark.sql.execution.datasources._
 import com.typesafe.akka.extension.quartz.QuartzSchedulerExtension
 
-class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlService, scalaService: DataPlatformScalaService, system: ActorSystem, materializer: Materializer) extends Controller with ContextHelper with SameOriginCheck {
+class DataPlatformController @Inject()(implicit dataPlatformConnectionService: DataPlatformConnectionService, sqlService: DataPlatformSqlService, scalaService: DataPlatformScalaService, system: ActorSystem, materializer: Materializer) extends Controller with ContextHelper with SameOriginCheck {
 
   val scheduler = QuartzSchedulerExtension(system)
 
@@ -44,8 +44,20 @@ class DataPlatformController @Inject()(implicit sqlService: DataPlatformSqlServi
     } recover handleException
    }
 
+  def testConnection = Action.async(parse.json) {implicit request =>
+    Logger.logger.info("request=" + request);
+    validateAndThen[NewDataSourceJDBC] {
+      entity => Future {
+        dataPlatformConnectionService.testJDBCConnection(entity) match {
+          case Success(ret) => Ok(Json.toJson(ret))
+        }
 
-    def createOrUpdateSqlScript = Action.async(parse.json) {implicit request =>
+      }
+    } recover handleException
+  }
+
+
+  def createOrUpdateSqlScript = Action.async(parse.json) {implicit request =>
       Logger.logger.info("request=" + request);
       validateAndThen[CodeSnippet] {
         entity => sqlService.createOrUpdateScript(entity).map{

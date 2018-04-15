@@ -2,14 +2,16 @@ package com.ddp.connector
 
 import java.util.Properties
 
-import com.ddp.connectors.{JDBCSparkConnector}
+import com.ddp.connectors.JDBCSparkConnector
 import com.ddp.models.Security
 import com.ddp.utils.Testing
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
+import scala.math.random
 
-class TestConnector extends Testing{
+
+class TestSparkConnector extends Testing{
   val conf = new SparkConf().setMaster("local[*]").setSparkHome("/usr/apache/spark-2.1.0-bin-hadoop2.7")
   val spark = SparkSession.builder().config(conf).getOrCreate()
 

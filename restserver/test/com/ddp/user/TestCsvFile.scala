@@ -15,7 +15,7 @@ class TestCsvFile extends SparkJobApi {
   override type JobOutput = List[Student1]
   def runJob(spark: SparkSession): JobOutput = {
 
-    val conn = FileConnector("restserver/test/resources/sample.csv", "csv", spark, "id int, name varchar(100), age int")
+    val conn = FileConnector("/home/eguo/Downloads/TUR_2018_06994201_024.csv", "csv", spark)
     import spark.sqlContext._
 
     conn.registerTempTable("temp123")

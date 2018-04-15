@@ -5,6 +5,7 @@
 # Home page
 GET         /ws                                         com.ddp.dataplatform.DataPlatformController.ws
 
+POST        /connection/test                            com.ddp.dataplatform.DataPlatformController.testConnection
 
 GET         /sp/sql/run/:name                           com.ddp.dataplatform.DataPlatformController.sparkRunSQLByName(name:String)
 POST        /sp/sql/run                                 com.ddp.dataplatform.DataPlatformController.sparkRunSql
