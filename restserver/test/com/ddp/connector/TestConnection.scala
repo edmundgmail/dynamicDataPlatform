@@ -6,7 +6,7 @@ import com.ddp.utils.Testing
 
 import scala.concurrent.Future
 
-class TestConnection extends Testing{ {
+class TestConnection extends Testing{
   val fixture = new DataPlatformConnectionService
   it("test Connection of JDBC") {
     val newDataSourceJDBC = NewDataSourceJDBC(
@@ -18,5 +18,5 @@ class TestConnection extends Testing{ {
     )
       //fixture.testConnection(newDataSourceJDBC)
   }
-}
+
 }

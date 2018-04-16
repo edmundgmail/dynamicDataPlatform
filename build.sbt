@@ -11,10 +11,10 @@ scalaVersion in ThisBuild := "2.11.8"
 
 lazy val versions = Map(
   "confluent" -> "3.3.1",
-  "hbase" -> "1.1.2",
+  "hbase" -> "1.3.0",
   "hadoop" -> "2.7.1",
   "jackson" -> "2.8.4",
-  "spark" -> "2.2.1",
+  "spark" -> "2.1.1",
   "elasticsearch" -> "6.1.0",
   "kafka"->"0.11.0.2"
 )
@@ -44,10 +44,23 @@ val sparkKafka = "org.apache.spark" % "spark-sql-kafka-0-10_2.11" % versions("sp
 val sparkKafkaStreaming = "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % versions("spark") % "compile"
 val kafka = "org.apache.kafka" % "kafka_2.11" % versions("kafka") % "compile"
 
+val hbaseClient = "org.apache.hbase" % "hbase-client" % versions("hbase")
+val hbaseCommon = "org.apache.hbase" % "hbase-common" % versions("hbase")
+val hbaseCommonTest = "org.apache.hbase" % "hbase-common" % versions("hbase") % "test" classifier "tests"
+val hbaseServer = "org.apache.hbase" % "hbase-server" % versions("hbase") % "test"
+val hbaseServerTest = "org.apache.hbase" % "hbase-server" % versions("hbase") % "test" classifier "tests"
+val hbaseHdpCompat = "org.apache.hbase" % "hbase-hadoop-compat" % versions("hbase") % "test"
+val hbaseHdpCompatTest = "org.apache.hbase" % "hbase-hadoop-compat" % versions("hbase") % "test" classifier "tests"
+val hbaseHdp2Compat = "org.apache.hbase" % "hbase-hadoop2-compat" % versions("hbase") % "test"
+val hbaseHdp2CompatTest = "org.apache.hbase" % "hbase-hadoop2-compat" % versions("hbase") % "test" classifier "tests"
+
 val userapiDependencies = Seq(sparkCoreProvided,sparkSqlProvided,sparkStreamProvided, sparkHiveProvided)
 
 val restDependencies = Seq(
   sparkCore,sparkSql,sparkStream, sparkHive,sparkKafka, sparkKafkaStreaming, kafka,
+  hbaseClient, hbaseCommon,
+  hbaseServer, hbaseServerTest, hbaseCommonTest, hbaseHdpCompat, hbaseHdpCompatTest, hbaseHdp2Compat,
+  hbaseHdp2CompatTest,
   "org.mongodb.spark" % "mongo-spark-connector_2.11" % versions("spark") % "compile",
   "org.reactivemongo" %% "play2-reactivemongo" % "0.11.13",
   "org.reactivemongo" %% "reactivemongo-play-json" % "0.11.14" % "compile",

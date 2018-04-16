@@ -8,6 +8,7 @@ object DataSourceType extends Enumeration {
   val JDBC = Value("JDBC")
   val LOCALFILE = Value("LOCALFILE")
   val HIVE = Value("HIVE")
+  val HBASE = Value("HBASE")
 }
 
 case class NewDataSourceRequest(val name: String, val sType: String, val description : String, request: String)
@@ -20,6 +21,7 @@ object NewDataSourceRequest{
 trait NewDataSource
 
 case class NewDataSourceJDBC(url: String, driver: String, user: String, pass: String, sql: String) extends NewDataSource
+case class NewDataSourceHBase() extends NewDataSource
 
 object NewDataSource{
   import reactivemongo.play.json.BSONFormats.BSONObjectIDFormat // This is required
