@@ -46,10 +46,10 @@ class DataPlatformController @Inject()(implicit dataPlatformConnectionService: D
 
   def testConnection = Action.async(parse.json) {implicit request =>
     Logger.logger.info("request=" + request);
-    validateAndThen[NewDataSourceJDBC] {
+    validateAndThen[NewDataSourceRequest] {
       entity => Future {
-        dataPlatformConnectionService.testJDBCConnection(entity) match {
-          case Success(ret) => Ok(Json.toJson(ret))
+        dataPlatformConnectionService.testConnection(entity) match {
+          case Success(ret) => Ok(Json.toJson(ret.asInstanceOf[UserJobStatus]))
         }
 
       }
