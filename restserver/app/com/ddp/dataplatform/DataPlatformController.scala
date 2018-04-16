@@ -50,8 +50,8 @@ class DataPlatformController @Inject()(implicit dataPlatformConnectionService: D
       entity => Future {
         dataPlatformConnectionService.testConnection(entity) match {
           case Success(ret) => Ok(Json.toJson(ret.asInstanceOf[UserJobStatus]))
+          case Failure(e) => BadRequest(s"Message: ${e.getMessage}, cause=${e.getCause}")
         }
-
       }
     } recover handleException
   }

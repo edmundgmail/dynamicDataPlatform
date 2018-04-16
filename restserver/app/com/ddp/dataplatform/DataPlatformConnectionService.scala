@@ -3,39 +3,41 @@ package com.ddp.dataplatform
 import com.ddp.models.{DataSourceType, NewDataSourceJDBC, NewDataSourceRequest, UserJobStatus}
 import javax.inject.{Inject, Singleton}
 
-import scala.util.Success
+import scala.util.{Failure, Success, Try}
 import play.api.db.Databases
-import play.libs.Json
-
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.json._
 
 @Singleton
 class DataPlatformConnectionService @Inject()() {
   def testConnection(newDataSourceRequest: NewDataSourceRequest) = {
-    val uuid = DataPlatformCoreService.generateUniqueId
+    DataSourceType.withName(newDataSourceRequest.sType) match {
+      case DataSourceType.JDBC =>
+        Json.parse(newDataSourceRequest.request).validate[NewDataSourceJDBC].map(jdbc=>
+        testJDBC(newDataSourceRequest.name, DataPlatformCoreService.generateUniqueId, jdbc))
+          .getOrElse(Failure(new Exception("Parsing Error")))
+      case _ =>
+    }
+  }
 
-    if(DataSourceType.withName(newDataSourceRequest.sType) == DataSourceType.JDBC)
-    {
-
-      val jdbc = Json.parse(newDataSourceRequest.request).asInstanceOf[NewDataSourceJDBC]
-
-      val testDb = Databases(
-        driver = jdbc.driver,
-        url = jdbc.url,
-        name = newDataSourceRequest.name,
-        config = Map(
-          "user" -> jdbc.user,
-          "password" -> jdbc.pass
-        )
+  def testJDBC(name: String, uuid: String, jdbc: NewDataSourceJDBC) = {
+    val testDb = Databases(
+      driver = jdbc.driver,
+      url = jdbc.url,
+      config = Map(
+        "user" -> jdbc.user,
+        "password" -> jdbc.pass
       )
-      val conn = testDb.getConnection()
-      try {
-        conn.createStatement.execute(jdbc.sql)
-        Success(UserJobStatus(newDataSourceRequest.name, "testConnection", uuid, "Success"))
-      } finally {
-        conn.close()
-      }
+    )
+
+    try{
+      testDb.withConnection(
+        conn => {
+          conn.createStatement.execute(jdbc.sql)
+          Success(UserJobStatus(name, "testConnection", uuid, "Success"))
+        })
+    }
+    catch {
+      case e : Throwable => Failure(e)
     }
   }
 }
