@@ -72,7 +72,8 @@ val restDependencies = Seq(
   "com.microsoft.sqlserver" % "mssql-jdbc" % "6.2.1.jre8",
   "mysql" % "mysql-connector-java" % "5.1.45",
   "com.databricks" % "spark-avro_2.11" % "3.2.0",
-  jdbc,
+  "com.chuusai" %% "shapeless" % "2.3.3",
+    jdbc,
   ws,
   filters,
   cache

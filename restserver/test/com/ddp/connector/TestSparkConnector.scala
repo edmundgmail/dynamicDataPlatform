@@ -46,7 +46,7 @@ class TestSparkConnector extends Testing{
   it("test mysql connection 1") {
     val connectionUrl = "jdbc:mysql://localhost:3306/ddp"
 
-    val jdbc = NewDataSourceJDBC(connectionUrl, "com.mysql.jdbc.Driver", "root","password", "(select * from student) summary_alias")
+    val jdbc = NewDataSourceJDBC(connectionUrl, "com.mysql.jdbc.Driver", "root","password", "(SELECT t.*, s.score  FROM ddp.score s, student t where t.id=s.id) summary_alias")
     import spark.implicits._
     val conn = JDBCSparkConnector(spark, jdbc)
     conn.registerTempTable("test1")
