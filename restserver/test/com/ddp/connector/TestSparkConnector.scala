@@ -3,7 +3,7 @@ package com.ddp.connector
 import java.util.Properties
 
 import com.ddp.connectors.JDBCSparkConnector
-import com.ddp.models.Security
+import com.ddp.models.{NewDataSourceJDBC, Security}
 import com.ddp.utils.Testing
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
@@ -27,18 +27,29 @@ class TestSparkConnector extends Testing{
 
   }
 
-  it("test mssql connection") {
+  it("test mysql connection") {
     val properties = new Properties()
-    val connectionUrl = "jdbc:mysql://localhost:3306/ddp;user=ddp;password=password"
+    val connectionUrl = "jdbc:mysql://localhost:3306/ddp"
 
-    properties.setProperty("url",connectionUrl)
+    properties.setProperty("jdbcUrl",connectionUrl)
 
-    properties.setProperty("query","(select ID, SEDOL from SEC_POSITION_SUMMARY) summary_alias")
+    properties.setProperty("sql","(select * from student) summary_alias")
+    properties.setProperty("user", "root")
+    properties.setProperty("password","password")
     import spark.implicits._
     val conn = new JDBCSparkConnector(spark,properties)
     conn.registerTempTable("test1")
     spark.sql("select * from test1").show(10)
+  }
 
 
+  it("test mysql connection 1") {
+    val connectionUrl = "jdbc:mysql://localhost:3306/ddp"
+
+    val jdbc = NewDataSourceJDBC(connectionUrl, "com.mysql.jdbc.Driver", "root","password", "(select * from student) summary_alias")
+    import spark.implicits._
+    val conn = JDBCSparkConnector(spark, jdbc)
+    conn.registerTempTable("test1")
+    spark.sql("select * from test1").show(10)
   }
 }

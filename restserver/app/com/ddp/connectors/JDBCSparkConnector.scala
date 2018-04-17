@@ -19,7 +19,7 @@ class JDBCSparkConnector(val spark: SparkSession, val properties: Properties) ex
 object JDBCSparkConnector {
   def apply(spark: SparkSession, jdbc: NewDataSourceJDBC) = {
     val properties = new Properties
-    properties.setProperty("jdbcURL", jdbc.jdbcUrl)
+    properties.setProperty("jdbcUrl", jdbc.jdbcUrl)
     properties.setProperty("user", jdbc.user)
     properties.setProperty("password", jdbc.password)
     properties.setProperty("sql", jdbc.sql)
