@@ -10,10 +10,10 @@ class TestConnection extends Testing{
   val fixture = new DataPlatformConnectionService
   it("test Connection of JDBC") {
     val newDataSourceJDBC = NewDataSourceJDBC(
-      url =  "jdbc:mysql://localhost:3306/ddp;user=root;password=password",
+      jdbcUrl =  "jdbc:mysql://localhost:3306/ddp;user=root;password=password",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      pass = "password",
+      password = "password",
       sql = ""
     )
       //fixture.testConnection(newDataSourceJDBC)

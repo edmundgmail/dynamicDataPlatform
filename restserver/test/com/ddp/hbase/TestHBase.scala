@@ -11,6 +11,7 @@ class TestHBase extends Testing with Logging{
       val y = x.map(Bytes.toString).mkString(",")
       println(s"rowkeys = ${y}")
   }
+
   it("test the filters") {
     val hBaseDAO =new HBaseDAO("localhost", "2181", "/hbase")
     val x = hBaseDAO.getRowkeysWithFilter("dev:t1", List(MyColumnValueFilter("cf1","name", "=", "edmund"), MyColumnValueFilter("cf1","age","=", "32")))
