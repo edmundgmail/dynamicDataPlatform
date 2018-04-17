@@ -20,9 +20,6 @@ import HBaseDAO._
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp
 
 
-trait MyFilter
-case class MyColumnValueFilter(cf: String, c: String, columnValue: String) extends MyFilter
-case class MyColumeRangeFilter(cf: String, c: String, columnValueUpper: String, columnValueLower : String) extends MyFilter
 
 case class HBaseDAO(coreSiteXml: String,
                     hdfsSiteXml: String,
@@ -150,15 +147,7 @@ case class HBaseDAO(coreSiteXml: String,
   }.getOrElse(Nil)
 
   def getRowkeysWithFilter(tableName: String, filters: List[MyFilter], limit: Int = 10000) : Seq[Array[Byte]] = retry("getRowKeysFromTable") {
-    val hbaseFilters = filters.map(
-      f=> f match {
-        case v: MyColumnValueFilter => List(new SingleColumnValueFilter(Bytes.toBytes(v.cf), Bytes.toBytes(v.c), CompareOp.EQUAL, Bytes.toBytes(v.columnValue)))
-        case r: MyColumeRangeFilter => List(new SingleColumnValueFilter(Bytes.toBytes(r.cf), Bytes.toBytes(r.c), CompareOp.LESS_OR_EQUAL, Bytes.toBytes(r.columnValueUpper)),
-          new SingleColumnValueFilter(Bytes.toBytes(r.cf), Bytes.toBytes(r.c), CompareOp.GREATER_OR_EQUAL, Bytes.toBytes(r.columnValueLower)))
-      }
-    ).flatten
-
-   val list = new FilterList(FilterList.Operator.MUST_PASS_ALL, hbaseFilters.asInstanceOf[List[Filter]].asJava)
+   val list = new FilterList(FilterList.Operator.MUST_PASS_ALL, filters.map(_.toHBaseFilter).asJava)
 
     getTable(tableName).map{ table =>
       val scan = new Scan().setFilter(list)

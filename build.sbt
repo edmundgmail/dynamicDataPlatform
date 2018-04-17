@@ -14,7 +14,7 @@ lazy val versions = Map(
   "hbase" -> "1.3.0",
   "hadoop" -> "2.7.1",
   "jackson" -> "2.8.4",
-  "spark" -> "2.1.1",
+  "spark" -> "2.2.1",
   "elasticsearch" -> "6.1.0",
   "kafka"->"0.11.0.2"
 )
