@@ -16,7 +16,8 @@ lazy val versions = Map(
   "jackson" -> "2.8.4",
   "spark" -> "2.1.1",
   "elasticsearch" -> "6.1.0",
-  "kafka"->"0.11.0.2"
+  "kafka"->"0.11.0.2",
+  "shc" -> "1.1.2-2.2-s_2.11-SNAPSHOT"
 )
 
 lazy val commonSettings = Seq(
@@ -43,6 +44,7 @@ val sparkHive = "org.apache.spark" % "spark-hive_2.11" % versions("spark")  % "c
 val sparkKafka = "org.apache.spark" % "spark-sql-kafka-0-10_2.11" % versions("spark") % "compile"
 val sparkKafkaStreaming = "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % versions("spark") % "compile"
 val kafka = "org.apache.kafka" % "kafka_2.11" % versions("kafka") % "compile"
+val shc = "com.hortonworks" % "shc" % versions("shc") % "compile"
 
 val hbaseClient = "org.apache.hbase" % "hbase-client" % versions("hbase")
 val hbaseCommon = "org.apache.hbase" % "hbase-common" % versions("hbase")
@@ -61,6 +63,7 @@ val restDependencies = Seq(
   hbaseClient, hbaseCommon,
   hbaseServer, hbaseServerTest, hbaseCommonTest, hbaseHdpCompat, hbaseHdpCompatTest, hbaseHdp2Compat,
   hbaseHdp2CompatTest,
+  shc,
   "org.mongodb.spark" % "mongo-spark-connector_2.11" % versions("spark") % "compile",
   "org.reactivemongo" %% "play2-reactivemongo" % "0.11.13",
   "org.reactivemongo" %% "reactivemongo-play-json" % "0.11.14" % "compile",

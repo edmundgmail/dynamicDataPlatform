@@ -1,7 +1,7 @@
 package com.ddp.dataplatform
 
 import com.ddp.connectors.JDBCSparkConnector
-import com.ddp.models.{DataSourceType, NewDataSourceJDBC, NewDataSourceRequest, UserJobStatus}
+import com.ddp.models._
 import javax.inject.{Inject, Singleton}
 import org.apache.spark.sql.DataFrame
 
@@ -14,13 +14,20 @@ class DataPlatformConnectionService @Inject()() {
   def testConnection(newDataSourceRequest: NewDataSourceRequest) = {
     DataSourceType.withName(newDataSourceRequest.sType) match {
       case DataSourceType.JDBC =>
-        Json.parse(newDataSourceRequest.request).validate[NewDataSourceJDBC].map(jdbc=>{
-          createRDDFromJDBC(jdbc)
-          testJDBC(newDataSourceRequest.name, DataPlatformCoreService.generateUniqueId, jdbc)})
+        Json.parse(newDataSourceRequest.request).validate[NewDataSourceJDBC].map(jdbc => {
+          //createRDDFromJDBC(jdbc)
+          testJDBC(newDataSourceRequest.name, DataPlatformCoreService.generateUniqueId, jdbc)
+        })
           .getOrElse(Failure(new Exception("Parsing Error")))
+
+      /*case DataSourceType.HBASE =>
+        Json.parse(newDataSourceRequest.request).validate[NewDataSourceHBase].map(hbase=>{
+          testHBase(newDataSourceRequest.name, DataPlatformCoreService.generateUniqueId, hbase)
+        }).getOrElse(Failure(new Exception("Parsing error")))*/
       case _ =>
     }
   }
+
 
   def createRDDFromJDBC(jdbc: NewDataSourceJDBC) : DataFrame = {
     val conn = JDBCSparkConnector(DataPlatformCoreService.spark, jdbc)
