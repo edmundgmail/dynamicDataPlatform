@@ -20,16 +20,17 @@ class DataPlatformConnectionService @Inject()() {
         })
           .getOrElse(Failure(new Exception("Parsing Error")))
 
-      /*case DataSourceType.HBASE =>
+      case DataSourceType.HBASE =>
         Json.parse(newDataSourceRequest.request).validate[NewDataSourceHBase].map(hbase=>{
           testHBase(newDataSourceRequest.name, DataPlatformCoreService.generateUniqueId, hbase)
-        }).getOrElse(Failure(new Exception("Parsing error")))*/
+        }).getOrElse(Failure(new Exception("Parsing error")))
       case _ =>
     }
   }
 
+  def testHBase(name: String, uuid: String, jdbc: NewDataSourceHBase) = ???
 
-  def createRDDFromJDBC(jdbc: NewDataSourceJDBC) : DataFrame = {
+    def createRDDFromJDBC(jdbc: NewDataSourceJDBC) : DataFrame = {
     val conn = JDBCSparkConnector(DataPlatformCoreService.spark, jdbc)
     conn.df
   }
